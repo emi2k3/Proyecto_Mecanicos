@@ -16,6 +16,7 @@ docker-compose down
 ## Endpoints
 Actualmente solo hay get:
 http://localhost:3000/api/*
+
 `EN PROGRESO`
 
 ## Variables de entorno
