@@ -2,12 +2,17 @@ const express = require('express');
 const router = express.Router();
 const clientesRoutes = require('./clientes.routes');
 const mecanicoRoutes = require('./mecanico.routes');
-const personasRoutes = require('./personas.routes');
+const reparacionesRoutes = require('./reparaciones.routes');
 const vehiculosRoutes = require('./vehiculos.routes');
+const repuestosRoutes = require('./repuestos.routes');
+const telefonosRoutes = require('./telefonos.routes');
 // Prefijos
 router.use('/clientes', clientesRoutes);
 router.use('/mecanicos', mecanicoRoutes);
-router.use('/personas', personasRoutes);
+router.use('/reparaciones', reparacionesRoutes);
+router.use('/telefonos', telefonosRoutes);
+router.use('/repuestos', repuestosRoutes);
 router.use('/vehiculos', vehiculosRoutes);
+
 
 module.exports = router;
