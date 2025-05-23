@@ -26,4 +26,10 @@ Para que el proyecto funcione correctamente, hagan un .env con estas cosas:
 ```
 PORT=3000
 NODE_ENV=development
+DB_HOST = db
+DB_USER = postgres
+DB_DATABASE = mecanicodb
+DB_PORT = 5432
+DB_PASSWORD = 123
+
 ```
