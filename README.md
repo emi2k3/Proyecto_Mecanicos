@@ -1,103 +1,103 @@
-## Requisitos 
-- Docker
+# 🔧 Sistema de Gestión de Mecánica
 
-### Docker
+Sistema completo para la gestión de un taller mecánicos.
 
-Construir y ejecutar los contenedores:
+## 📋 Requisitos
 
+- **Docker** 
+
+## 🚀 Instalación y Configuración
+
+### 1. Variables de Entorno
+
+Para la función correcta de este programa si o si se debe crear un archivo `.env` en la raíz del proyecto con la siguiente configuración:
+
+```env
+PORT=3000
+NODE_ENV=development
+DB_HOST=db
+DB_USER=postgres
+DB_DATABASE=mecanicodb
+DB_PORT=5432
+DB_PASSWORD=123
+```
+
+### 2. Ejecutar con Docker
+
+**Construir y ejecutar los contenedores:**
 ```bash
 docker-compose up --build
 ```
 
+**Detener los contenedores:**
 ```bash
 docker-compose down
 ```
 
-## Endpoints
-Clientes
+## 📚 API Endpoints
 
-    GET Todos: GET http://localhost:3000/api/clientes/
+La API estará disponible en `http://localhost:3000/api/`
 
-    GET por ID: GET http://localhost:3000/api/clientes/:id
+### 👥 Clientes
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `GET` | `/api/clientes/` | Obtener todos los clientes |
+| `GET` | `/api/clientes/:id` | Obtener cliente por ID |
+| `POST` | `/api/clientes/` | Crear nuevo cliente |
+| `PUT` | `/api/clientes/:id` | Actualizar cliente |
+| `DELETE` | `/api/clientes/:id` | Eliminar cliente |
 
-    POST Crear: POST http://localhost:3000/api/clientes/
+### 🔧 Mecánicos
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `GET` | `/api/mecanicos/` | Obtener todos los mecánicos |
+| `GET` | `/api/mecanicos/:id` | Obtener mecánico por ID |
+| `POST` | `/api/mecanicos/` | Crear nuevo mecánico |
+| `PUT` | `/api/mecanicos/:id` | Actualizar mecánico |
+| `DELETE` | `/api/mecanicos/:id` | Eliminar mecánico |
 
-    PUT Editar: PUT http://localhost:3000/api/clientes/:id
+### 🛠️ Repuestos
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `GET` | `/api/repuestos/` | Obtener todos los repuestos |
+| `GET` | `/api/repuestos/:id` | Obtener repuesto por ID |
+| `POST` | `/api/repuestos/` | Crear nuevo repuesto |
+| `PUT` | `/api/repuestos/:id` | Actualizar repuesto |
+| `DELETE` | `/api/repuestos/:id` | Eliminar repuesto |
 
-    DELETE Borrar: DELETE http://localhost:3000/api/clientes/:id
+### 📞 Teléfonos
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `GET` | `/api/telefonos/` | Obtener todos los teléfonos |
+| `GET` | `/api/telefonos/:id` | Obtener teléfono por ID |
+| `POST` | `/api/telefonos/` | Crear nuevo teléfono |
+| `PUT` | `/api/telefonos/:id` | Actualizar teléfono |
+| `DELETE` | `/api/telefonos/:id` | Eliminar teléfono |
 
-Mecánicos
+### 🚗 Vehículos
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `GET` | `/api/vehiculos/` | Obtener todos los vehículos |
+| `GET` | `/api/vehiculos/:id` | Obtener vehículo por ID |
+| `POST` | `/api/vehiculos/` | Crear nuevo vehículo |
+| `PUT` | `/api/vehiculos/:id` | Actualizar vehículo |
+| `DELETE` | `/api/vehiculos/:id` | Eliminar vehículo |
 
-    GET Todos: GET http://localhost:3000/api/mecanicos/
+### 🔨 Reparaciones
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `GET` | `/api/reparaciones/` | Obtener todas las reparaciones |
+| `GET` | `/api/reparaciones/:id` | Obtener reparación por ID |
+| `POST` | `/api/reparaciones/` | Crear nueva reparación |
+| `PUT` | `/api/reparaciones/:id` | Actualizar reparación |
+| `DELETE` | `/api/reparaciones/:id` | Eliminar reparación |
 
-    GET por ID: GET http://localhost:3000/api/mecanicos/:id
+## 🛡️ Tecnologías
 
-    POST Crear: POST http://localhost:3000/api/mecanicos/
+- **Frontend**: React Native **FUTURO**
+- **Backend**: Node.js
+- **Base de Datos**: PostgreSQL
+- **Containerización**: Docker 
 
-    PUT Editar: PUT http://localhost:3000/api/mecanicos/:id
+---
 
-    DELETE Borrar: DELETE http://localhost:3000/api/mecanicos/:id
-
-Repuestos
-
-    GET Todos: GET http://localhost:3000/api/repuestos/
-
-    GET por ID: GET http://localhost:3000/api/repuestos/:id
-
-    POST Crear: POST http://localhost:3000/api/repuestos/
-
-    PUT Editar: PUT http://localhost:3000/api/repuestos/:id
-
-    DELETE Borrar: DELETE http://localhost:3000/api/repuestos/:id
-
-Teléfonos
-
-    GET Todos: GET http://localhost:3000/api/telefonos/
-
-    GET por ID: GET http://localhost:3000/api/telefonos/:id
-
-    POST Crear: POST http://localhost:3000/api/telefonos/
-
-    PUT Editar: PUT http://localhost:3000/api/telefonos/:id
-
-    DELETE Borrar: DELETE http://localhost:3000/api/telefonos/:id
-
-Vehículos
-
-    GET Todos: GET http://localhost:3000/api/vehiculos/
-
-    GET por ID: GET http://localhost:3000/api/vehiculos/:id
-
-    POST Crear: POST http://localhost:3000/api/vehiculos/
-
-    PUT Editar: PUT http://localhost:3000/api/vehiculos/:id
-
-    DELETE Borrar: DELETE http://localhost:3000/api/vehiculos/:id
-
-Reparaciones
-
-    GET Todas: GET http://localhost:3000/api/reparaciones/
-
-    GET por ID: GET http://localhost:3000/api/reparaciones/:id
-
-    POST Crear: POST http://localhost:3000/api/reparaciones/
-
-    PUT Editar: PUT http://localhost:3000/api/reparaciones/:id
-
-    DELETE Borrar: DELETE http://localhost:3000/api/reparaciones/:id
-
-
-## Variables de entorno
-
-Para que el proyecto funcione correctamente, hagan un .env con estas cosas:
-
-```
-PORT=3000
-NODE_ENV=development
-DB_HOST = db
-DB_USER = postgres
-DB_DATABASE = mecanicodb
-DB_PORT = 5432
-DB_PASSWORD = 123
-
-```
