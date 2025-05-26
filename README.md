@@ -1,16 +1,16 @@
 # 🔧 Sistema de Gestión de Mecánica
 
-Sistema completo para la gestión de un taller mecánicos.
+Sistema completo para la gestión de talleres mecánicos que permite administrar clientes, vehículos, mecánicos, repuestos, reparaciones y contactos.
 
 ## 📋 Requisitos
 
-- **Docker** 
+- **Docker** y **Docker Compose**
 
 ## 🚀 Instalación y Configuración
 
 ### 1. Variables de Entorno
 
-Para la función correcta de este programa si o si se debe crear un archivo `.env` en la raíz del proyecto con la siguiente configuración:
+Crea un archivo `.env` en la raíz del proyecto con la siguiente configuración:
 
 ```env
 PORT=3000
@@ -92,16 +92,16 @@ La API estará disponible en `http://localhost:3000/api/`
 | `PUT` | `/api/reparaciones/:id` | Actualizar reparación |
 | `DELETE` | `/api/reparaciones/:id` | Eliminar reparación |
 
-### ✉️ ## Postman
+## ✉️ Postman
 
-# En la carpeta de Postman están exportadas las rutas con valores de ejemplo. 
+En la carpeta de Postman están exportadas las rutas con valores de ejemplo para facilitar las pruebas de la API.
 
 ## 🛡️ Tecnologías
 
-- **Frontend**: React Native **⏱️FUTURO⏱️**
 - **Backend**: Node.js
 - **Base de Datos**: PostgreSQL
-- **Containerización**: Docker 
+- **Containerización**: Docker & Docker Compose
 
 ---
 
+> **Nota**: Asegúrate de tener Docker instalado y funcionando antes de ejecutar los comandos.
