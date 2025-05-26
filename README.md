@@ -1,16 +1,16 @@
 # 🔧 Sistema de Gestión de Mecánica
 
-Sistema completo para la gestión de talleres mecánicos que permite administrar clientes, vehículos, mecánicos, repuestos, reparaciones y contactos.
+Sistema completo para la gestión de talleres mecánicos.
 
 ## 📋 Requisitos
 
-- **Docker** y **Docker Compose**
+- **Docker** 
 
 ## 🚀 Instalación y Configuración
 
 ### 1. Variables de Entorno
 
-Crea un archivo `.env` en la raíz del proyecto con la siguiente configuración:
+Archivo  `.env` que va en la raíz del proyecto con la siguiente configuración:
 
 ```env
 PORT=3000
@@ -100,8 +100,5 @@ En la carpeta de Postman están exportadas las rutas con valores de ejemplo para
 
 - **Backend**: Node.js
 - **Base de Datos**: PostgreSQL
-- **Containerización**: Docker & Docker Compose
+- **Containerización**: Docker 
 
----
-
-> **Nota**: Asegúrate de tener Docker instalado y funcionando antes de ejecutar los comandos.
