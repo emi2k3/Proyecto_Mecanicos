@@ -94,7 +94,7 @@ La API estará disponible en `http://localhost:3000/api/`
 
 ### ✉️ Postman
 
-## En la carpeta de Postman están exportadas las rutas con valores de ejemplo. ##
+## En la carpeta de Postman están exportadas las rutas con valores de ejemplo. 
 
 ## 🛡️ Tecnologías
 
