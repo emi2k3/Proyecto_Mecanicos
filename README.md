@@ -92,6 +92,8 @@ La API estará disponible en `http://localhost:3000/api/`
 | `PUT` | `/api/reparaciones/:id` | Actualizar reparación |
 | `DELETE` | `/api/reparaciones/:id` | Eliminar reparación |
 
+FALTA MECANICO REPARACIONES
+
 ## ✉️ Postman
 
 En la carpeta de Postman están exportadas las rutas con valores de ejemplo para facilitar las pruebas de la API.
