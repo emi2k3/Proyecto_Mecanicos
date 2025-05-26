@@ -71,9 +71,10 @@ router.post('/', ClienteSchema, async (req, res) => {
       INSERT INTO Telefono (ID_Persona, Numero)
       SELECT ID_Persona, $3
       FROM nuevo_cliente;
+      RETURNING *
     `, [documento, nombre_completo, telefono]);
 
-    return res.status(200).json({message: "El cliente fue creado correctamente"});
+    return res.status(200).json({message: "El cliente fue creado correctamente", data: resultado.rows[0]});
   } catch (error) {
     return res.status(400).json({message: error.message});
   }
@@ -125,12 +126,13 @@ router.put('/:id',
       UPDATE Telefono
       SET Numero = $4
       WHERE ID_Persona = (SELECT ID_Persona FROM persona_actualizada);
+      RETURNING *
     `,[documento,nombre_completo,idpersona,telefono]);
     
     if (resultado.rowCount === 0) {
       return res.status(404).json({ message: "Cliente no encontrado" });
     }
-    return res.status(200).json({message: "El cliente fue editado correctamente"});
+    return res.status(200).json({message: "El cliente fue editado correctamente", data: resultado.rows[0]});
     } catch (error) {
       return res.status(400).json({message: error.message});
     }

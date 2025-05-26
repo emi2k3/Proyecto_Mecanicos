@@ -5,11 +5,13 @@ const personaSchema = [
     body('documento')
       .notEmpty().withMessage('El documento es requerido')
       .custom((value) => {
-        const ciUruguaya = /^\d{1,2}\.\d{3}\.\d{3}-\d{1}$/;
-        const rutUruguayo = /^\d{3}\.\d{3}\.\d{3}$/;
+        // CI: 7 u 8 dígitos
+        const ciUruguaya = /^\d{7,8}$/;
+        // RUT: 12 dígitos
+        const rutUruguayo = /^\d{12}$/;
     
         if (!ciUruguaya.test(value) && !rutUruguayo.test(value)) {
-          throw new Error('El documento debe ser una CI o RUT uruguayo válido');
+          throw new Error('El documento debe ser una CI (7-8 dígitos) o RUT (12 dígitos) uruguayo válido');
         }
         return true;
       }),
