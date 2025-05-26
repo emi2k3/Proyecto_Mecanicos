@@ -92,6 +92,10 @@ La API estará disponible en `http://localhost:3000/api/`
 | `PUT` | `/api/reparaciones/:id` | Actualizar reparación |
 | `DELETE` | `/api/reparaciones/:id` | Eliminar reparación |
 
+### ✉️ Postman
+
+## En la carpeta de Postman están exportadas las rutas con valores de ejemplo. ##
+
 ## 🛡️ Tecnologías
 
 - **Frontend**: React Native **⏱️FUTURO⏱️**
