@@ -57,7 +57,7 @@ router.post('/', MecanicoSchema, async (req, res) => {
   
   const { documento, nombre_completo, telefono, especializacion, id_turno} = req.body;
   try {
-    await pool.query(`
+    const resultado = await pool.query(`
       WITH nueva_persona AS (
           INSERT INTO Persona (Documento, Nombre_Completo)
           VALUES ($1, $2) 
@@ -70,10 +70,11 @@ router.post('/', MecanicoSchema, async (req, res) => {
       )
       INSERT INTO Telefono (ID_Persona, Numero)
       SELECT ID_Persona, $3
-      FROM nuevo_Mecanico;
+      FROM nuevo_Mecanico
+      RETURNING *;
     `, [documento, nombre_completo, telefono, especializacion,id_turno]);
 
-    return res.status(200).json({message: "El Mecanico fue creado correctamente"});
+    return res.status(200).json({message: "El Mecanico fue creado correctamente", data: resultado.rows[0]});
   } catch (error) {
     return res.status(400).json({message: error.message});
   }
@@ -110,40 +111,44 @@ router.put('/:id',
   }
   else
   {
-    const idpersona = req.params.id;
+    const ID_Mecanico = req.params.id;
     const {documento, nombre_completo, telefono, especializacion, id_turno} = req.body;
     const client = await pool.connect();
 
     try {
       await client.query('BEGIN');
 
-      await client.query(`
-        UPDATE Persona 
-        SET documento = $1, nombre_completo = $2 
-        FROM Mecanico
-        WHERE Persona.ID_Persona = Mecanico.ID_Persona 
-        AND Mecanico.ID_Mecanico = $3
-      `, [documento, nombre_completo, idpersona]);
-
+      // Primero actualizamos el Mecanico para obtener el ID_Persona
       const mecanicoResult = await client.query(`
         UPDATE Mecanico
         SET especializacion = $1, id_turno = $2
         WHERE ID_Mecanico = $3      
         RETURNING ID_Persona
-      `, [especializacion, id_turno, idpersona]);
+      `, [especializacion, id_turno, ID_Mecanico]);
 
+      if (mecanicoResult.rowCount === 0) {
+        await client.query('ROLLBACK');
+        return res.status(404).json({ message: "Mecánico no encontrado" });
+      }
+
+      const ID_Persona = mecanicoResult.rows[0].id_persona;
+
+      // Actualizamos Persona
+      await client.query(`
+        UPDATE Persona 
+        SET documento = $1, nombre_completo = $2 
+        WHERE ID_Persona = $3
+      `, [documento, nombre_completo, ID_Persona]);
+
+      // Actualizamos Telefono
       await client.query(`
         UPDATE Telefono
         SET Numero = $1
         WHERE ID_Persona = $2
-      `, [telefono, mecanicoResult.rows[0].id_persona]);
+      `, [telefono, ID_Persona]);
 
       await client.query('COMMIT');
-    
-      if (mecanicoResult.rowCount === 0) {
-        return res.status(404).json({ message: "Mecánico no encontrado" });
-      }
-      return res.status(200).json({message: "El Mecánico fue editado correctamente", data: mecanicoResult.rows[0]});
+      return res.status(200).json({message: "El Mecánico fue editado correctamente"});  
     } catch (error) {
       await client.query('ROLLBACK');
       return res.status(400).json({message: error.message});
@@ -151,7 +156,6 @@ router.put('/:id',
       client.release();
     }
   }
-
 });
 
 module.exports = router;

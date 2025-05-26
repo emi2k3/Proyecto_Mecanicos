@@ -94,8 +94,7 @@ router.put('/:id', [
 });
 
 router.delete('/:id', [
-  param('id').isInt().withMessage('El ID debe ser un número entero'),
-  TelefonoSchema
+  param('id').isInt().withMessage('El ID debe ser un número entero')
 ], async(req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

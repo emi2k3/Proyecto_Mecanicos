@@ -57,7 +57,7 @@ router.post('/', ClienteSchema, async (req, res) => {
   
   const { documento, nombre_completo, telefono } = req.body;
   try {
-    await pool.query(`
+    const resultado = await pool.query(`
       WITH nueva_persona AS (
           INSERT INTO Persona (Documento, Nombre_Completo)
           VALUES ($1, $2) 
@@ -70,9 +70,9 @@ router.post('/', ClienteSchema, async (req, res) => {
       )
       INSERT INTO Telefono (ID_Persona, Numero)
       SELECT ID_Persona, $3
-      FROM nuevo_cliente;
+      FROM nuevo_cliente
       RETURNING *
-    `, [documento, nombre_completo, telefono]);
+      `, [documento, nombre_completo, telefono]);
 
     return res.status(200).json({message: "El cliente fue creado correctamente", data: resultado.rows[0]});
   } catch (error) {
@@ -125,14 +125,13 @@ router.put('/:id',
       )
       UPDATE Telefono
       SET Numero = $4
-      WHERE ID_Persona = (SELECT ID_Persona FROM persona_actualizada);
-      RETURNING *
+      WHERE ID_Persona = (SELECT ID_Persona FROM persona_actualizada)
     `,[documento,nombre_completo,idpersona,telefono]);
     
     if (resultado.rowCount === 0) {
       return res.status(404).json({ message: "Cliente no encontrado" });
     }
-    return res.status(200).json({message: "El cliente fue editado correctamente", data: resultado.rows[0]});
+    return res.status(200).json({message: "El cliente fue editado correctamente"});
     } catch (error) {
       return res.status(400).json({message: error.message});
     }
