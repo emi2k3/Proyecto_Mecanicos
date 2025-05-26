@@ -4,6 +4,7 @@ const pool = require("../database/db")
 const { VehiculoSchema } = require('../schemas/vehiculo.schema');
 const { validationResult,param } = require('express-validator');  
 
+// Obtener todos los vehiculos
 router.get('/', async(req, res) => {
   try {
     const resultado = await pool.query(`
@@ -15,6 +16,7 @@ router.get('/', async(req, res) => {
   }
 });
 
+  
 router.get('/:id', [
   param('id').isInt().withMessage('El ID debe ser un número entero')
 ], async(req, res) => {

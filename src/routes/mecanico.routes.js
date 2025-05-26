@@ -48,7 +48,7 @@ router.get('/:id', [
 
  
 });
-
+// Crear un Mecanico
 router.post('/', MecanicoSchema, async (req, res) => {
   const errors = validationResult(req);
   if(!errors.isEmpty()){
@@ -102,7 +102,7 @@ router.delete('/:id', [
     return res.status(400).json({ message: error.message });
   }
 });
-
+// Editar un Mecanico
 router.put('/:id',
   [MecanicoSchema, param('id').isInt().withMessage('El ID debe ser un número entero')], async(req, res) => {
   const errors = validationResult(req);

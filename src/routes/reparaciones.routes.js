@@ -1,10 +1,106 @@
 const express = require('express');
 const router = express.Router();    
+const { ReparacionSchema } = require("../schemas/reparacion.schema")
+const { validationResult, param } = require('express-validator');  
+const pool = require("../database/db")
 
-router.get('/', (req, res) => {
-  res.json({
-    message: "Lista de reparaciones"
-  });
+router.get('/', async (req, res) => {
+  try {
+    const resultado = await pool.query(`SELECT * FROM Reparacion`);
+    if (resultado.rowCount === 0) {
+      return res.status(404).json({message: "No hay reparaciones."});
+    }
+    return res.status(200).json({message: resultado.rows});
+  } catch (error) {
+    return res.status(500).json({message: error.message});
+  }
+});
+
+router.get('/:id',
+  [param('id').isInt().withMessage("El ID debe ser un número entero")],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({errors: errors.array()})
+    } else {
+      const ID_Reparacion = req.params.id;
+      try {
+        const resultado = await pool.query(`
+          SELECT * FROM Reparacion 
+          WHERE ID_Reparacion = $1
+          RETURNING *`, [ID_Reparacion]); 
+        if (resultado.rowCount === 0) {
+          return res.status(404).json({message: "No existe una reparación con ese ID."})
+        }
+        return res.status(200).json({message: "Reparación encontrada", data: resultado.rows[0]});
+      } catch (error) {
+        return res.status(500).json({message: error.message})
+      }
+    }
+});
+
+router.post('/', ReparacionSchema, async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  try {
+    const {descripcion, tiempo, id_vehiculo} = req.body;
+    const resultado = await pool.query(`
+      INSERT INTO Reparacion 
+      (Descripcion, Tiempo, ID_Vehiculo) 
+      VALUES ($1, $2, $3)
+      RETURNING *`, [descripcion, tiempo, id_vehiculo]);
+    return res.status(200).json({message: "La reparación fue creada correctamente", data: resultado.rows[0]});
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
+});
+
+router.put('/:id',
+  [param('id').isInt().withMessage("El ID debe ser un número entero")],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      const ID_Reparacion = req.params.id;
+      const {descripcion, tiempo, id_vehiculo} = req.body;
+      const resultado = await pool.query(`
+        UPDATE Reparacion
+        SET Descripcion = $1, Tiempo = $2, ID_Vehiculo = $3 
+        WHERE ID_Reparacion = $4
+        RETURNING *`, [descripcion, tiempo, id_vehiculo, ID_Reparacion]);
+      if (resultado.rowCount === 0) {
+        return res.status(404).json({message: "No se encontró la reparación"});
+      }
+      return res.status(200).json({message: "La reparación fue editada correctamente", data: resultado.rows[0]});
+    } catch (error) {
+      return res.status(500).json({message: error.message})
+    }
+});
+
+router.delete('/:id',
+  [param('id').isInt().withMessage("El ID debe ser un número entero")],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      const ID_Reparacion = req.params.id;
+      const resultado = await pool.query(`
+        DELETE FROM Reparacion
+        WHERE ID_Reparacion = $1
+        RETURNING *`, [ID_Reparacion]);
+      if (resultado.rowCount === 0) {
+        return res.status(404).json({message: "No se encontró la reparación"});
+      }
+      return res.status(200).json({message: "La reparación fue eliminada correctamente"});
+    } catch (error) {
+      return res.status(500).json({message: error.message})
+    }
 });
 
 module.exports = router;

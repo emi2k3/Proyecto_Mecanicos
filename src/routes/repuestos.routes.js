@@ -4,6 +4,7 @@ const pool = require("../database/db")
 const { RepuestoSchema } = require('../schemas/repuestos.schema');
 const { validationResult,param } = require('express-validator');  
 
+// Obtener todos los repuestos
 router.get('/', async(req, res) => {
   try {
     const resultado = await pool.query(`
@@ -17,6 +18,8 @@ router.get('/', async(req, res) => {
     return res.status(400).json({message: error.message});
   }
 });
+
+// Obtener un repuesto por ID
 router.get('/:id', [
   param('id').isInt().withMessage('El ID debe ser un número entero')
 ], async(req, res) => {
@@ -39,7 +42,7 @@ router.get('/:id', [
     }
   }
 });
-
+// Crear un repuesto
 router.post('/', RepuestoSchema, async(req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -59,7 +62,7 @@ router.post('/', RepuestoSchema, async(req, res) => {
   }
   }
 });
-
+// Editar un repuesto
 router.put('/:id', [
   param('id').isInt().withMessage('El ID debe ser un número entero'),
   RepuestoSchema
@@ -83,7 +86,7 @@ router.put('/:id', [
   }
   }
 });
-
+// Eliminar un repuesto
 router.delete('/:id', [
   param('id').isInt().withMessage('El ID debe ser un número entero')
 ], async(req, res) => {

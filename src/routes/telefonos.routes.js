@@ -4,7 +4,7 @@ const pool = require("../database/db")
 const { TelefonoSchema } = require('../schemas/telefonos.schema');
 const { validationResult,param } = require('express-validator');  
 
-
+// Obtener todos los telefonos
 router.get('/', async(req, res) => {
   try {
     const resultado = await pool.query(`
@@ -19,6 +19,7 @@ router.get('/', async(req, res) => {
   }
 });
 
+// Obtener un telefono por ID
 router.get('/:id', [
   param('id').isInt().withMessage('El ID debe ser un número entero')
 ], async(req, res) => {
@@ -43,6 +44,7 @@ router.get('/:id', [
   }
 });
 
+// Crear un telefono
 router.post('/', TelefonoSchema, async(req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -63,7 +65,7 @@ router.post('/', TelefonoSchema, async(req, res) => {
   }
   }
 });
-
+// Editar un telefono
 router.put('/:id', [
   param('id').isInt().withMessage('El ID debe ser un número entero'),
   TelefonoSchema
@@ -92,7 +94,7 @@ router.put('/:id', [
   }
   }
 });
-
+// Eliminar un telefono
 router.delete('/:id', [
   param('id').isInt().withMessage('El ID debe ser un número entero')
 ], async(req, res) => {
