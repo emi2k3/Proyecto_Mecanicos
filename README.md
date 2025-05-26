@@ -94,7 +94,7 @@ La API estará disponible en `http://localhost:3000/api/`
 
 ## 🛡️ Tecnologías
 
-- **Frontend**: React Native **FUTURO**
+- **Frontend**: React Native **⏱️FUTURO⏱️**
 - **Backend**: Node.js
 - **Base de Datos**: PostgreSQL
 - **Containerización**: Docker 
