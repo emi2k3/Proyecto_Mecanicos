@@ -6,7 +6,6 @@ Sistema completo para la gestión de talleres mecánicos.
 - **Node.js (versión 18 o superior)**
 - **Android Studio (CON SU DEVELOPMENT KIT)**
 - **JDK 17**
-- **Java Development Kit (JDK)**
 
 ## 🚀 Instalación y Configuración
 
