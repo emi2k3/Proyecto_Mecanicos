@@ -11,6 +11,8 @@ services:
       - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
+    networks:
+      - app-network
 
   api:
     build: .
@@ -28,3 +30,9 @@ services:
       - PGHOST=${DB_HOST}
       - PGPORT=${DB_PORT}
     command: npm run dev
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
