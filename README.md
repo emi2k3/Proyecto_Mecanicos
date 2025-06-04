@@ -74,7 +74,7 @@ Si algo falla, el comando más útil es:
 npm run android
 ```
 
-### 8. Ejecutar con Docker
+### (). Ejecutar con Docker
 
 **Construir y ejecutar los contenedores:**
 ```bash
@@ -87,6 +87,7 @@ docker-compose down
 ```
 
 ## 📚 API Endpoints
+
 La API estará disponible en `http://localhost:3000/api/`
 
 ### 👥 Clientes
