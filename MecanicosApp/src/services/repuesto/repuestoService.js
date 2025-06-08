@@ -12,12 +12,24 @@ export class repuestoService
     try {
         
        const response = await this.Servicio.get('repuestos');
-  
         return response.message;
                 
     } catch (error) {
         console.error(error);
         return [];
+    }
+    
+   }
+
+   async putRepuesto(id,body)
+   {
+    try {
+        
+        await this.Servicio.put('repuestos',body,id);
+                
+    } catch (error) {
+        console.error(error);
+
     }
     
    }
