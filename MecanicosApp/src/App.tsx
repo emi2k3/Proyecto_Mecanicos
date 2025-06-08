@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import StockSearch from './screens/StockSearch;
+import StockSearch from './screens/StockSearch';
 
 function App(): React.JSX.Element {
 
