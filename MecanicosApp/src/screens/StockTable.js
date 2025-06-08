@@ -18,7 +18,9 @@ const StockTable = () => {
   return (
     
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Stock</Text>
+     <View style={styles.header}>
+        <Text style={styles.headerTitle}>Stock</Text>
+      </View>
       
     
       <View style={styles.tableHeader}>
@@ -46,7 +48,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-    paddingTop: 50
+  },
+  header: {
+    backgroundColor: '#4a4a4a',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+  },
+  headerTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   title: {
     fontSize: 35,
@@ -58,6 +70,7 @@ const styles = StyleSheet.create({
   tableHeader: {
     flexDirection: 'row',
     backgroundColor: '#e8e8e8',
+    marginTop:75,
     paddingVertical: 12,
     paddingHorizontal: 15,
     borderTopLeftRadius: 12,

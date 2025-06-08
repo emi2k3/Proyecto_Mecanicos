@@ -7,11 +7,12 @@
 
 import React from 'react';
 import StockSearch from './screens/StockSearch';
+import StockTable from './screens/StockTable';
 
 function App(): React.JSX.Element {
 
   return (
-    <StockSearch></StockSearch>
+    <StockTable></StockTable>
           
   );
 }

@@ -77,8 +77,11 @@ const StockSearch = () => {
   };
 
   return (
+    
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Buscar y Ajustar Stock</Text>
+        <View style={styles.header}>
+        <Text style={styles.headerTitle}>Agregar/Restar Stock</Text>
+      </View>
 
       <View style={styles.searchContainer}>
         <View style={styles.searchRow}>
@@ -179,9 +182,23 @@ const styles = StyleSheet.create({
     position: 'relative',
     zIndex: 1000,
     marginBottom: 20,
+    marginTop: 20,
   },
   searchRow: {
     flexDirection: 'row',
+  },  
+  header: {
+    backgroundColor: '#4a4a4a',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    marginHorizontal: -20, 
+      marginTop: -20,
+  },
+  headerTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   searchInput: {
     flex: 1,
