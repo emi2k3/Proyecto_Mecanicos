@@ -16,6 +16,33 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/vehiculo/:id',
+  [param('id').isInt().withMessage("El ID debe ser un número entero")],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const ID_Vehiculo = req.params.id;
+
+    try {
+      const resultado = await pool.query(
+        `SELECT * FROM Vehiculo WHERE ID_Vehiculo = $1`,
+        [ID_Vehiculo]
+      );
+
+      if (resultado.rowCount === 0) {
+        return res.status(404).json({ message: "Vehículo no encontrado." });
+      }
+
+      return res.status(200).json({ message: resultado.rows[0] });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+);
+
 router.get('/:id',
   [param('id').isInt().withMessage("El ID debe ser un número entero")],
   async (req, res) => {
