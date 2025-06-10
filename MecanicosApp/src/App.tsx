@@ -7,13 +7,12 @@
 
 import React from 'react';
 import StockSearch from './screens/StockSearch';
-import StockTable from './screens/StockTable';
+import AssignedCases from './screens/AssignedCases';
 
 function App(): React.JSX.Element {
 
   return (
-    <StockTable></StockTable>
-          
+    <AssignedCases />
   );
 }
 
