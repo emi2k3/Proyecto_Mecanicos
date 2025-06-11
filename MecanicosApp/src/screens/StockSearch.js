@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  View, 
-  Text, 
+  View,  
   TextInput, 
   TouchableOpacity, 
   StyleSheet, 
@@ -9,6 +8,7 @@ import {
 } from 'react-native';
 import { Dialog } from '@rneui/themed';
 import { repuestoService } from '../services/repuesto/repuestoService';
+import { Header, Icon, Text } from '@rneui/themed';
 
 
 const StockSearch = () => {
@@ -79,10 +79,6 @@ const StockSearch = () => {
   return (
     
     <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.header}>
-        <Text style={styles.headerTitle}>Agregar/Restar Stock</Text>
-      </View>
-
       <View style={styles.searchContainer}>
         <View style={styles.searchRow}>
           <TextInput
@@ -187,19 +183,6 @@ const styles = StyleSheet.create({
   searchRow: {
     flexDirection: 'row',
   },  
-  header: {
-    backgroundColor: '#4a4a4a',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    marginHorizontal: -20, 
-      marginTop: -20,
-  },
-  headerTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
   searchInput: {
     flex: 1,
     backgroundColor: '#e8e8e8',
