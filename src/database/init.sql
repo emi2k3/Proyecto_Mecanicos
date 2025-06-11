@@ -42,6 +42,7 @@ CREATE TABLE Mecanico (
     Especializacion VARCHAR(36) NOT NULL,
     ID_Turno INTEGER NOT NULL,
     ID_Persona INTEGER NOT NULL UNIQUE,
+    Contrasena TEXT NOT NULL,
     FOREIGN KEY (ID_Turno) REFERENCES Turno(ID_Turno) ON DELETE CASCADE,
     FOREIGN KEY (ID_Persona) REFERENCES Persona(ID_Persona) ON DELETE CASCADE
 );
@@ -201,9 +202,9 @@ INSERT INTO Vehiculo (Matricula, Tipo, ID_Cliente) VALUES
 ('XYZ789', 'Auto', 2);
 
 -- Insertar Mecánicos (asociados a personas y turnos)
-INSERT INTO Mecanico (Especializacion, ID_Turno, ID_Persona) VALUES
-('Motores', 1, 1),  -- Matías Pérez
-('Frenos', 2, 4);   -- Ana Fernández
+INSERT INTO Mecanico (Especializacion, ID_Turno, ID_Persona, Contrasena) VALUES
+('Motores', 1, 1, '$2b$10$Z2aNMZ3zAcDJOyebAguArOw.rqQ4oievmjbFGocWwBtxMLpg4dUCC'), -- Matias Pérez, contraseña sin encriptar (password123)
+('Frenos', 2, 4, '$2b$10$IiGyD39n4g1IRD3Kc3KDJu4QTJTRBKl.C9vfDDIEEdbh1Uzi1DurK'); -- Ana Fernández, contraseña sin encriptar (securepass456)
 
 -- Insertar Repuestos
 INSERT INTO Repuesto (Descripcion, Cantidad, Tipo) VALUES
