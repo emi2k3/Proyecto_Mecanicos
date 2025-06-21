@@ -7,7 +7,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import CrearStock from './screens/CreateStock';
 import StockSearch from './screens/StockSearch';
 import AssignedCases from './screens/AssignedCases';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import CustomDrawer from './componentes/CustomDrawer';
 
 const Drawer = createDrawerNavigator();
 function App(): React.JSX.Element {
@@ -16,7 +16,15 @@ const screens = [ {name: "Ver Stock" , component: StockTable},{name: "Crear Stoc
   return (
 
       <NavigationContainer>
-        <Drawer.Navigator >
+        <Drawer.Navigator 
+        drawerContent={(props) =><CustomDrawer {...props}/>}
+        screenOptions={{
+          drawerActiveBackgroundColor:'#5BC0BE',
+          drawerActiveTintColor:'white',
+          drawerLabelStyle: {}
+        }}
+        >
+          
         {screens.map((screen)=>(
           <Drawer.Screen key={screen.name} name={screen.name} component={screen.component}>
           </Drawer.Screen>

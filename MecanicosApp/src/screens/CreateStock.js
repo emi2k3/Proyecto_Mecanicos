@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     padding: 20,
-    justifyContent: 'center',
+
   },
   card: {
     backgroundColor: '#fff',
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    marginTop: 75
   },
   inputContainer: {
     marginBottom: 20,
