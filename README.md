@@ -154,3 +154,5 @@ En la carpeta de Postman están exportadas las rutas con valores de ejemplo para
 - **Base de Datos**: PostgreSQL
 - **Containerización**: Docker
 - **Mobile**: React Native
+- **UML**: PlantUML - Draw.io
+- **Diseño de interfaces**: Figma
