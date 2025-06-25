@@ -62,6 +62,7 @@ CREATE TABLE Reparacion (
     Descripcion VARCHAR(36) NOT NULL,
     Tiempo INTEGER NOT NULL CHECK (Tiempo > 0),
     ID_Vehiculo INTEGER NOT NULL,
+    Estado BOOLEAN DEFAULT FALSE, 
     FOREIGN KEY (ID_Vehiculo) REFERENCES Vehiculo(ID_Vehiculo) ON DELETE CASCADE
 );
 
@@ -227,3 +228,6 @@ INSERT INTO MecanicoRealizaReparacion (ID_Mecanico, ID_Reparacion) VALUES
 INSERT INTO RepuestosReparacion (ID_Repuesto, ID_Reparacion, Cantidad_Usada) VALUES
 (1, 1, 1),  -- 1 Filtro para reparación 1
 (2, 2, 2);  -- 2 Pastillas para reparación 2
+
+UPDATE Reparacion SET Estado = true WHERE ID_Reparacion = 1;
+UPDATE Reparacion SET Estado = true WHERE ID_Reparacion = 2;
