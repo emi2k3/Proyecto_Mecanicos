@@ -11,6 +11,14 @@ const VehiculoSchema = [
         .notEmpty().withMessage('El tipo es requerido')
         .isString().withMessage('El tipo debe ser texto')
         .isLength({ max: 36 }).withMessage('El tipo no puede exceder 36 caracteres'),
+    body('marca')
+        .notEmpty().withMessage('La marca es requerdida')
+        .isString().withMessage('La marca debe ser texto')
+        .isLength({ max: 36 }).withMessage('La marca no puede exceder 36 caracteres'),
+    body('modelo')
+        .notEmpty().withMessage('El modelo es requerido')
+        .isString().withMessage('El modelo debe ser texto')
+        .isLength({ max: 36 }).withMessage('El modelo no puede exceder 36 caracteres'),
 
     body('id_cliente')
         .notEmpty().withMessage('El id_cliente es requerido')

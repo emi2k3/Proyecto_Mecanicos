@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, {useEffect, useState } from 'react';
+import { View, StyleSheet, ScrollView,DrawerLayoutAndroid,TouchableOpacity } from 'react-native';
 import { ListItem } from '@rneui/themed';
 import { repuestoService } from '../services/repuesto/repuestoService';
-import { Repuesto } from '../interfaces/repuesto';
-
-const StockTable = () => {
+import { Header, Icon, Text } from '@rneui/themed';
+const StockTable = ({navigation}) => {
   const [stockData, setStockData] = useState([]);
   useEffect(()=>{
     const fetchData = async () =>{
@@ -15,50 +14,55 @@ const StockTable = () => {
     }
     fetchData();
   },[]);
+
+ 
+
   return (
-    
+   
     <ScrollView style={styles.container}>
-     <View style={styles.header}>
-        <Text style={styles.headerTitle}>Stock</Text>
-      </View>
-      
-    
       <View style={styles.tableHeader}>
         <Text style={[styles.headerText, styles.nombreColumn]}>Nombre</Text>
         <Text style={[styles.headerText, styles.tipoColumn]}>Tipo</Text>
         <Text style={[styles.headerText, styles.cantidadColumn]}>Cantidad</Text>
       </View>
 
-      {stockData.map((item, index) => (
-        
-        <ListItem key={index} bottomDivider containerStyle={{  borderBottomWidth: 1.5,
-          borderColor: '#ccc'}} >
-          <ListItem.Content style={styles.row}>
-            <Text style={[styles.cellText, styles.nombreColumn]}>{item.descripcion}</Text>
-            <Text style={[styles.cellText, styles.tipoColumn]}>{item.tipo}</Text>
-            <Text style={[styles.cellText, styles.cantidadColumn]}>{item.cantidad}</Text>
-          </ListItem.Content>
-        </ListItem>
-      ))}
+      {stockData.map((item, index) => {
+      const isOdd = index % 2 !== 0; 
+  return (
+    <ListItem 
+      key={index} 
+      bottomDivider 
+      containerStyle={{
+        borderBottomWidth: 1.5,
+        borderColor: '#ccc',
+        backgroundColor: isOdd ? '#E2E2E2' : '#ffffff' 
+      }}
+    >
+      <ListItem.Content style={styles.row}>
+        <Text style={[styles.cellText, styles.nombreColumn]}>{item.descripcion}</Text>
+        <Text style={[styles.cellText, styles.tipoColumn]}>{item.tipo}</Text>
+        <Text style={[styles.cellText, styles.cantidadColumn]}>{item.cantidad}</Text>
+      </ListItem.Content>
+    </ListItem>
+  );
+})}
+    
     </ScrollView>
+  
   );
 };
 
 const styles = StyleSheet.create({
+  drawercontainer: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  navigationContainer: {
+    backgroundColor: '#ecf0f1',
+  },
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  },
-  header: {
-    backgroundColor: '#4a4a4a',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-  },
-  headerTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
   title: {
     fontSize: 35,
@@ -93,7 +97,18 @@ const styles = StyleSheet.create({
   },
   nombreColumn: { flex: 1.5 , textAlign: 'center' },
   tipoColumn: { flex: 1.5, textAlign: 'center' },
-  cantidadColumn: { flex: 1, textAlign: 'center' }
+  cantidadColumn: { flex: 1, textAlign: 'center' },
+  navBotton: {
+    backgroundColor: '#3273dc',
+    borderRadius: 6,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginTop: 20
+  },
+  navBottonText: {
+    color: '#fff',
+    fontWeight: '600',
+  }
   });
 
 export default StockTable;

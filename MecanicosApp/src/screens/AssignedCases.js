@@ -40,34 +40,6 @@ const AssignedCases = () => {
 
   return (
     <ScrollView style={{ backgroundColor: '#f2f3f5', flex: 1 }}>
-      
-    <Header
-      backgroundColor="#2c3e50"
-      containerStyle={{ height: 80 }}
-      leftComponent={
-        <View style={{ flexDirection: 'row', alignItems: 'center', width: 250, paddingTop: 20 }}>
-          <Icon
-            name="bars"
-            type="font-awesome"
-            color="#ffffff"
-            size={20}
-            containerStyle={{ marginRight: 10 }}
-          />
-          <Text
-            numberOfLines={1}
-            style={{
-              fontSize: 18,
-              fontWeight: 'bold',
-              color: '#fff',
-              flexShrink: 1,
-            }}
-          >
-            Trabajos Asignados
-          </Text>
-        </View>
-      }
-    />
-
     <View style={{ marginTop: 20 }}>
             {loading ? (
         <ActivityIndicator size="large" color="#5BC0BE" style={{ marginTop: 40 }} />

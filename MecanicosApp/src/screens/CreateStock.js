@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import {
   View,
-  Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
   KeyboardAvoidingView,
-  Platform,
   Alert,
 } from 'react-native';
+import { Header, Icon, Text } from '@rneui/themed';
 
 const CrearStock = () => {
   const [descripcion, setDescripcion] = useState('');
@@ -41,10 +40,6 @@ const CrearStock = () => {
     <KeyboardAvoidingView
       style={styles.container}
     >
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Crear Stock</Text>
-      </View>
-
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.card}>
     
@@ -100,22 +95,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f0f0f0',
   },
-  header: {
-    backgroundColor: '#4a4a4a',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    paddingTop: Platform.OS === 'ios' ? 50 : 15,
-  },
-  headerTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
   scrollContent: {
     flexGrow: 1,
     padding: 20,
-    justifyContent: 'center',
+
   },
   card: {
     backgroundColor: '#fff',
@@ -129,13 +112,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 30,
-    color: '#333',
+    marginTop: 75
   },
   inputContainer: {
     marginBottom: 20,

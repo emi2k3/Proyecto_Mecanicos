@@ -48,13 +48,13 @@ router.post('/', VehiculoSchema, async(req, res) => {
   }
   else
   {
-    const { matricula, tipo, id_cliente } = req.body;
+    const { matricula, tipo, id_cliente, marca, modelo } = req.body;
     try {
       const resultado = await pool.query(`
-      INSERT INTO Vehiculo (Matricula, Tipo, ID_Cliente) 
-      VALUES ($1, $2, $3)
+      INSERT INTO Vehiculo (Matricula, Tipo, ID_Cliente, Marca, Modelo) 
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING *
-    `, [matricula, tipo, id_cliente]);
+    `, [matricula, tipo, id_cliente , marca , modelo]);
     return res.status(200).json({message: "Vehiculo creado correctamente", data: resultado.rows[0]});
   } catch (error) {
     return res.status(400).json({message: error.message});
@@ -73,12 +73,12 @@ router.post('/', VehiculoSchema, async(req, res) => {
   else
   {
     const ID_Vehiculo = req.params.id;
-    const { matricula, tipo, id_cliente } = req.body;
+    const { matricula, tipo, id_cliente,marca,modelo } = req.body;
     try {
       const resultado = await pool.query(`
-      UPDATE Vehiculo SET Matricula = $1, Tipo = $2, ID_Cliente = $3 WHERE ID_Vehiculo = $4
+      UPDATE Vehiculo SET Matricula = $1, Tipo = $2, ID_Cliente = $3, Marca = $5, Modelo = $6 WHERE ID_Vehiculo = $4
       RETURNING *
-    `, [matricula, tipo, id_cliente, ID_Vehiculo]);
+    `, [matricula, tipo, id_cliente, ID_Vehiculo, marca, modelo]);
     if (resultado.rowCount === 0) {
       return res.status(404).json({message: "Vehiculo no encontrado"});
     }

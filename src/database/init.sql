@@ -32,6 +32,8 @@ CREATE TABLE Vehiculo (
     ID_Vehiculo SERIAL PRIMARY KEY,
     Matricula VARCHAR(36) NOT NULL UNIQUE,
     Tipo VARCHAR(36) NOT NULL,
+    Marca VARCHAR(36) NOT NULL,
+    Modelo VARCHAR(36) NOT NULL,
     ID_Cliente INTEGER NOT NULL,
     FOREIGN KEY (ID_Cliente) REFERENCES Cliente(ID_Cliente) ON DELETE CASCADE
 );
@@ -61,6 +63,7 @@ CREATE TABLE Reparacion (
     Descripcion VARCHAR(36) NOT NULL,
     Tiempo INTEGER NOT NULL CHECK (Tiempo > 0),
     ID_Vehiculo INTEGER NOT NULL,
+    Estado BOOLEAN DEFAULT FALSE, 
     FOREIGN KEY (ID_Vehiculo) REFERENCES Vehiculo(ID_Vehiculo) ON DELETE CASCADE
 );
 
@@ -197,9 +200,9 @@ INSERT INTO Cliente (ID_Persona) VALUES
 (3);
 
 -- Insertar Vehículos
-INSERT INTO Vehiculo (Matricula, Tipo, ID_Cliente) VALUES
-('ABC123', 'Camioneta', 1),
-('XYZ789', 'Auto', 2);
+INSERT INTO Vehiculo (Matricula, Tipo, ID_Cliente, Marca, Modelo) VALUES
+('ABC123', 'Camioneta', 1, 'Renault', 'KWID'),
+('XYZ789', 'Auto', 2, 'Toyota', 'Crown Majesta 1996');
 
 -- Insertar Mecánicos (asociados a personas y turnos)
 INSERT INTO Mecanico (Especializacion, ID_Turno, ID_Persona, Contrasena) VALUES
@@ -226,3 +229,6 @@ INSERT INTO MecanicoRealizaReparacion (ID_Mecanico, ID_Reparacion) VALUES
 INSERT INTO RepuestosReparacion (ID_Repuesto, ID_Reparacion, Cantidad_Usada) VALUES
 (1, 1, 1),  -- 1 Filtro para reparación 1
 (2, 2, 2);  -- 2 Pastillas para reparación 2
+
+UPDATE Reparacion SET Estado = true WHERE ID_Reparacion = 1;
+UPDATE Reparacion SET Estado = true WHERE ID_Reparacion = 2;
