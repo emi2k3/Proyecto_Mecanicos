@@ -1,9 +1,7 @@
-const { personaSchema } = require('./persona.schema');
+const { personaSchema } = require("./persona.schema");
 
-const ClienteSchema = [
-  ...personaSchema
-];
+const ClienteSchema = [...personaSchema];
 
 module.exports = {
-  ClienteSchema
+  ClienteSchema,
 };

@@ -9,6 +9,7 @@ CREATE TABLE Turno (
 CREATE TABLE Persona (
     ID_Persona SERIAL PRIMARY KEY,
     Documento VARCHAR(36) NOT NULL UNIQUE,
+    Rol CHAR(1) NOT NULL,
     Nombre_Completo VARCHAR(36) NOT NULL
 );
 
@@ -181,11 +182,11 @@ INSERT INTO Turno (Nombre) VALUES
 ('Noche');
 
 -- Insertar Personas
-INSERT INTO Persona (Documento, Nombre_Completo) VALUES
-('12345678', 'Matías Pérez'),
-('23456789', 'Laura Gómez'),
-('34567890', 'Carlos Rodríguez'),
-('45678901', 'Ana Fernández');
+INSERT INTO Persona (Documento, Nombre_Completo,Rol) VALUES
+('12345678', 'Matías Pérez','2'),
+('23456789', 'Laura Gómez','1'),
+('34567890', 'Carlos Rodríguez','1'),
+('45678901', 'Ana Fernández','2');
 
 -- Insertar Teléfonos
 INSERT INTO Telefono (ID_Persona, Numero) VALUES
@@ -205,6 +206,7 @@ INSERT INTO Vehiculo (Matricula, Tipo, ID_Cliente, Marca, Modelo) VALUES
 ('XYZ789', 'Auto', 2, 'Toyota', 'Crown Majesta 1996');
 
 -- Insertar Mecánicos (asociados a personas y turnos)
+-- ROL 1:CLIENTE  ROL 2:MECANICO  ROL 3:JEFE DE TALLER
 INSERT INTO Mecanico (Especializacion, ID_Turno, ID_Persona, Contrasena) VALUES
 ('Motores', 1, 1, '$2b$10$Z2aNMZ3zAcDJOyebAguArOw.rqQ4oievmjbFGocWwBtxMLpg4dUCC'), -- Matias Pérez, contraseña sin encriptar (password123)
 ('Frenos', 2, 4, '$2b$10$IiGyD39n4g1IRD3Kc3KDJu4QTJTRBKl.C9vfDDIEEdbh1Uzi1DurK'); -- Ana Fernández, contraseña sin encriptar (securepass456)
