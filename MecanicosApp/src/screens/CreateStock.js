@@ -8,32 +8,55 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-import { Header, Icon, Text } from '@rneui/themed';
+import { Text, Dialog } from '@rneui/themed';
+import { repuestoService } from '../services/repuesto/repuestoService';
+
+const servicio = new repuestoService();
+
 
 const CrearStock = () => {
+  const [confirmarVisibile, setconfirmarVisibile] = useState(false);
   const [descripcion, setDescripcion] = useState('');
   const [cantidad, setCantidad] = useState('');
   const [tipo, setTipo] = useState('');
 
-  const handleCrear = () => {
-   
+  const dialog = () => {
+    setconfirmarVisibile(!confirmarVisibile);
+  };
+
+  const handleCrear = async () => {
+  
     if (!descripcion || !cantidad || !tipo) {
       Alert.alert('Error', 'Por favor completa todos los campos');
       return;
     }
-    
-    console.log('Crear Stock:', {
+
+    const nuevoRepuesto = {
+      descripcion,
+      cantidad: parseInt(cantidad),
+      tipo,
+    };
+
+    try {
+      await servicio.createNewRepuesto(nuevoRepuesto);
+      Alert.alert('Éxito', 'Repuesto creado correctamente');
+
+      console.log('Crear Stock:', {
       descripcion,
       cantidad,
       tipo,
     });
-    
-    //Dialogo de que se creo correctamente 
-    
-    // Limpiar formulario después de crear
-    setDescripcion('');
-    setCantidad('');
-    setTipo('');
+
+    dialog();
+
+      // Limpiar formulario
+      setDescripcion('');
+      setCantidad('');
+      setTipo('');
+  } catch (error) {
+    console.error('Error al crear el repuesto:', error);
+    Alert.alert('Error', 'Hubo un problema al crear el repuesto');
+  }
   };
 
   return (
@@ -79,12 +102,23 @@ const CrearStock = () => {
           
           <TouchableOpacity
             style={styles.createButton}
-            onPress={handleCrear}
+            onPress={dialog}
             activeOpacity={0.8}
           >
             <Text style={styles.buttonText}>Crear</Text>
           </TouchableOpacity>
         </View>
+
+        <Dialog
+          isVisible={confirmarVisibile}
+          onBackdropPress={dialog}
+          >
+          <Dialog.Title title="¿Quiere confirmar el ingreso de un nuevo repuesto?"/>
+          <Dialog.Actions>
+            <Dialog.Button title="Cancelar" onPress={dialog}/>
+            <Dialog.Button title="Aceptar" onPress={handleCrear} />
+          </Dialog.Actions>
+        </Dialog>
       </ScrollView>
     </KeyboardAvoidingView>
   );

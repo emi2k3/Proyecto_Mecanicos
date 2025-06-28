@@ -1,19 +1,25 @@
-import React, {useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView,DrawerLayoutAndroid,TouchableOpacity } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { ListItem } from '@rneui/themed';
 import { repuestoService } from '../services/repuesto/repuestoService';
-import { Header, Icon, Text } from '@rneui/themed';
+import { Text } from '@rneui/themed';
+
+
 const StockTable = ({navigation}) => {
   const [stockData, setStockData] = useState([]);
-  useEffect(()=>{
-    const fetchData = async () =>{
+
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
         const service = new repuestoService();
         const repuestos = await service.getAllRepuestos();
-        setStockData(repuestos); 
-        
-    }
-    fetchData();
-  },[]);
+        setStockData(repuestos);
+      };
+      fetchData();
+    }, [])
+  );
 
  
 

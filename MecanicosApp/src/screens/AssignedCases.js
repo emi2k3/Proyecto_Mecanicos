@@ -1,6 +1,6 @@
 import React, { useEffect, useState }  from 'react';
 import { ScrollView, View } from 'react-native';
-import { Header, Card, Icon, Button, Text } from '@rneui/themed';
+import { Card, Icon, Button, Text } from '@rneui/themed';
 import { reparacionService } from '../services/reparacion/reparacionService';
 import { ActivityIndicator } from 'react-native';
 
