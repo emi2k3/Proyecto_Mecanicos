@@ -1,5 +1,5 @@
 import '../gesture-handler.native';
-import React from 'react';
+import React, {Component} from 'react';
 
 import StockTable from './screens/StockTable';
 import {NavigationContainer} from '@react-navigation/native';
@@ -11,6 +11,7 @@ import CustomDrawer from './componentes/CustomDrawer';
 import FinishedCases from './screens/FinishedCases';
 import Login from './screens/Login';
 import CaseFinalForm from './screens/CaseFinalForm';
+import NewCase from './screens/NewCase';
 
 const Drawer = createDrawerNavigator();
 function App(): React.JSX.Element {
@@ -22,6 +23,7 @@ function App(): React.JSX.Element {
     {name: 'Casos Terminados', component: FinishedCases},
     {name: 'Login', component: Login},
     {name: 'Informe Completo', component: CaseFinalForm},
+    {name: 'Nuevo Ingreso', component: NewCase},
   ];
   return (
     <NavigationContainer>

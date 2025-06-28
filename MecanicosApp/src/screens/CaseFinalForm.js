@@ -204,25 +204,6 @@ const CaseFinalForm = ({route}) => {
     }
   };
 
-  // Función opcional para limpiar el formulario después del envío exitoso
-  const limpiarFormulario = () => {
-    setFormData({
-      selectedRepuesto: '',
-      cantidad: '',
-      tiempoReparacion: '',
-      descripcion: '',
-    });
-    setRepuestosAgregados([]);
-    setSelectedMecanicos([]);
-    setSelectedRepuestoObj(null);
-    setUiState({
-      loadingRepuestos: false,
-      loadingMecanicos: false,
-      showRepuestoDropdown: false,
-      showMecanicoDropdown: false,
-    });
-  };
-
   // Validaciones
   const canAddRepuesto =
     selectedRepuestoObj && formData.cantidad && parseInt(formData.cantidad) > 0;
