@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {repuestoService} from '../services/repuesto/repuestoService';
 import {mecanicosService} from '../services/mecanicos/mecanicosService';
+import {reparacionService} from '../services/reparacion/reparacionService';
 
 const CaseFinalForm = ({route}) => {
   // Datos de navegación
@@ -31,6 +32,7 @@ const CaseFinalForm = ({route}) => {
   // Estados de datos disponibles
   const [availableRepuestos, setAvailableRepuestos] = useState([]);
   const [availableMecanicos, setAvailableMecanicos] = useState([]);
+  const [enviando, setEnviando] = useState(false);
 
   // Estados de UI
   const [uiState, setUiState] = useState({
@@ -46,6 +48,7 @@ const CaseFinalForm = ({route}) => {
   // Servicios
   const repuestoServiceInstance = new repuestoService();
   const mecanicosServiceInstance = new mecanicosService();
+  const reparacionServiceInstance = new reparacionService();
 
   // Cargar datos iniciales
   useEffect(() => {
@@ -155,21 +158,69 @@ const CaseFinalForm = ({route}) => {
   };
 
   // Handler para envío del formulario
-  const handleSubmit = () => {
-    const submitData = {
-      reparacionId,
-      repuestos: repuestosAgregados,
-      tiempoReparacion: formData.tiempoReparacion,
-      mecanicos: selectedMecanicos.map(m =>
-        typeof m === 'object' ? {id: m.id} : m,
-      ),
-      descripcion: formData.descripcion,
-      fechaCreacion: new Date().toISOString(),
-      vehiculo,
-    };
+  const handleSubmit = async () => {
+    try {
+      const submitData = {
+        reparacionId,
+        repuestos: repuestosAgregados,
+        tiempoReparacion: formData.tiempoReparacion,
+        mecanicos: selectedMecanicos.map(m =>
+          typeof m === 'object' ? {id: m.id} : {id: m},
+        ),
+        descripcion: formData.descripcion,
+        vehiculo,
+      };
 
-    console.log('Datos del formulario:', submitData);
-    alert('Formulario enviado!');
+      console.log('Datos a enviar:', submitData);
+
+      // Validar datos antes de enviar
+      const validacion = reparacionServiceInstance.validarDatos(submitData);
+
+      if (!validacion.esValido) {
+        alert(`Errores de validación:\n${validacion.errores.join('\n')}`);
+        return;
+      }
+
+      // Mostrar indicador de carga
+      setEnviando(true);
+
+      // Enviar datos
+      const resultado = await reparacionServiceInstance.completarReparacion(
+        submitData,
+      );
+
+      alert('¡Reparación completada exitosamente!');
+      console.log('Resultado:', resultado);
+
+      // Aquí puedes navegar a otra pantalla o limpiar el formulario
+      // navigation.goBack(); // Si usas React Navigation
+      // O limpiar el formulario:
+      // limpiarFormulario();
+    } catch (error) {
+      console.error('Error al enviar formulario:', error);
+      alert(`Error al completar la reparación: ${error.message}`);
+    } finally {
+      setEnviando(false);
+    }
+  };
+
+  // Función opcional para limpiar el formulario después del envío exitoso
+  const limpiarFormulario = () => {
+    setFormData({
+      selectedRepuesto: '',
+      cantidad: '',
+      tiempoReparacion: '',
+      descripcion: '',
+    });
+    setRepuestosAgregados([]);
+    setSelectedMecanicos([]);
+    setSelectedRepuestoObj(null);
+    setUiState({
+      loadingRepuestos: false,
+      loadingMecanicos: false,
+      showRepuestoDropdown: false,
+      showMecanicoDropdown: false,
+    });
   };
 
   // Validaciones
@@ -214,8 +265,16 @@ const CaseFinalForm = ({route}) => {
             onChange={value => updateFormData('descripcion', value)}
           />
 
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitButtonText}>Completar informe</Text>
+          <TouchableOpacity
+            style={[
+              styles.submitButton,
+              enviando && styles.submitButtonDisabled,
+            ]}
+            onPress={handleSubmit}
+            disabled={enviando}>
+            <Text style={styles.submitButtonText}>
+              {enviando ? 'Enviando...' : 'Completar informe'}
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -599,6 +658,10 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     fontWeight: '600',
+  },
+  submitButtonDisabled: {
+    backgroundColor: '#cccccc',
+    opacity: 0.6,
   },
 });
 

@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
 import {ScrollView, View} from 'react-native';
 import {Card, Icon, Button, Text} from '@rneui/themed';
 import {reparacionService} from '../services/reparacion/reparacionService';
@@ -8,32 +9,41 @@ const AssignedCases = ({navigation}) => {
   const [reparaciones, setReparaciones] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const service = new reparacionService();
-        const reparacionesData = await service.getAllReparaciones();
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const service = new reparacionService();
+          const reparacionesData = await service.getAllReparaciones();
 
-        const reparacionesConVehiculo = await Promise.all(
-          reparacionesData.map(async rep => {
-            const vehiculo = await service.getVehiculoReparado(rep.id_vehiculo);
-            return {
-              ...rep,
-              vehiculo,
-            };
-          }),
-        );
+          // Filtrar solo las reparaciones con estado=false
+          const reparacionesPendientes = reparacionesData.filter(
+            rep => rep.estado === false,
+          );
 
-        setReparaciones(reparacionesConVehiculo);
-      } catch (error) {
-        console.error('Error al obtener las reparaciones:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+          const reparacionesConVehiculo = await Promise.all(
+            reparacionesPendientes.map(async rep => {
+              const vehiculo = await service.getVehiculoReparado(
+                rep.id_vehiculo,
+              );
+              return {
+                ...rep,
+                vehiculo,
+              };
+            }),
+          );
 
-    fetchData();
-  }, []);
+          setReparaciones(reparacionesConVehiculo);
+        } catch (error) {
+          console.error('Error al obtener las reparaciones:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchData();
+    }, []),
+  );
 
   const handleCompletarInforme = reparacion => {
     // Navegar a la pantalla "Informe Completo" con los datos de la reparación

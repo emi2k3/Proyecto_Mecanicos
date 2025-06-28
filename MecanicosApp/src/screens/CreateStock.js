@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   TextInput,
@@ -8,11 +8,10 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-import { Text, Dialog } from '@rneui/themed';
-import { repuestoService } from '../services/repuesto/repuestoService';
+import {Text, Dialog} from '@rneui/themed';
+import {repuestoService} from '../services/repuesto/repuestoService';
 
 const servicio = new repuestoService();
-
 
 const CrearStock = () => {
   const [confirmarVisibile, setconfirmarVisibile] = useState(false);
@@ -25,7 +24,6 @@ const CrearStock = () => {
   };
 
   const handleCrear = async () => {
-  
     if (!descripcion || !cantidad || !tipo) {
       Alert.alert('Error', 'Por favor completa todos los campos');
       return;
@@ -42,30 +40,27 @@ const CrearStock = () => {
       Alert.alert('Éxito', 'Repuesto creado correctamente');
 
       console.log('Crear Stock:', {
-      descripcion,
-      cantidad,
-      tipo,
-    });
+        descripcion,
+        cantidad,
+        tipo,
+      });
 
-    dialog();
+      dialog();
 
       // Limpiar formulario
       setDescripcion('');
       setCantidad('');
       setTipo('');
-  } catch (error) {
-    console.error('Error al crear el repuesto:', error);
-    Alert.alert('Error', 'Hubo un problema al crear el repuesto');
-  }
+    } catch (error) {
+      console.error('Error al crear el repuesto:', error);
+      Alert.alert('Error', 'Hubo un problema al crear el repuesto');
+    }
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-    >
+    <KeyboardAvoidingView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.card}>
-    
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Descripción/Nombre</Text>
             <TextInput
@@ -76,7 +71,7 @@ const CrearStock = () => {
               placeholderTextColor="#999"
             />
           </View>
-          
+
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Cantidad</Text>
             <TextInput
@@ -88,7 +83,7 @@ const CrearStock = () => {
               placeholderTextColor="#999"
             />
           </View>
-          
+
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Tipo</Text>
             <TextInput
@@ -99,23 +94,19 @@ const CrearStock = () => {
               placeholderTextColor="#999"
             />
           </View>
-          
+
           <TouchableOpacity
             style={styles.createButton}
             onPress={dialog}
-            activeOpacity={0.8}
-          >
+            activeOpacity={0.8}>
             <Text style={styles.buttonText}>Crear</Text>
           </TouchableOpacity>
         </View>
 
-        <Dialog
-          isVisible={confirmarVisibile}
-          onBackdropPress={dialog}
-          >
-          <Dialog.Title title="¿Quiere confirmar el ingreso de un nuevo repuesto?"/>
+        <Dialog isVisible={confirmarVisibile} onBackdropPress={dialog}>
+          <Dialog.Title title="¿Quiere confirmar el ingreso de un nuevo repuesto?" />
           <Dialog.Actions>
-            <Dialog.Button title="Cancelar" onPress={dialog}/>
+            <Dialog.Button title="Cancelar" onPress={dialog} />
             <Dialog.Button title="Aceptar" onPress={handleCrear} />
           </Dialog.Actions>
         </Dialog>
@@ -132,7 +123,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     padding: 20,
-
   },
   card: {
     backgroundColor: '#fff',
@@ -146,7 +136,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    marginTop: 75
+    marginTop: 75,
   },
   inputContainer: {
     marginBottom: 20,

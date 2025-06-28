@@ -61,8 +61,8 @@ CREATE TABLE Repuesto (
 -- Tabla: Reparacion
 CREATE TABLE Reparacion (
     ID_Reparacion SERIAL PRIMARY KEY,
-    Descripcion VARCHAR(36) NOT NULL,
-    Tiempo INTEGER NOT NULL CHECK (Tiempo > 0),
+    Descripcion TEXT NOT NULL,
+    Tiempo INTEGER CHECK (Tiempo > 0),
     ID_Vehiculo INTEGER NOT NULL,
     Estado BOOLEAN DEFAULT FALSE, 
     FOREIGN KEY (ID_Vehiculo) REFERENCES Vehiculo(ID_Vehiculo) ON DELETE CASCADE
@@ -218,9 +218,9 @@ INSERT INTO Repuesto (Descripcion, Cantidad, Tipo) VALUES
 ('Bujía', 20, 'Encendido');
 
 -- Insertar Reparaciones
-INSERT INTO Reparacion (Descripcion, Tiempo, ID_Vehiculo) VALUES
-('Cambio de filtro', 2, 1),
-('Reemplazo de pastillas de freno', 3, 2);
+INSERT INTO Reparacion (Descripcion, ID_Vehiculo) VALUES
+('Cambio de filtro', 1),
+('Reemplazo de pastillas de freno', 2);
 
 -- Relación Mecánico - Reparación
 INSERT INTO MecanicoRealizaReparacion (ID_Mecanico, ID_Reparacion) VALUES
@@ -232,5 +232,3 @@ INSERT INTO RepuestosReparacion (ID_Repuesto, ID_Reparacion, Cantidad_Usada) VAL
 (1, 1, 1),  -- 1 Filtro para reparación 1
 (2, 2, 2);  -- 2 Pastillas para reparación 2
 
-UPDATE Reparacion SET Estado = true WHERE ID_Reparacion = 1;
-UPDATE Reparacion SET Estado = true WHERE ID_Reparacion = 2;

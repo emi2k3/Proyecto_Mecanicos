@@ -171,4 +171,72 @@ router.delete(
   }
 );
 
+router.post("/completar", async (req, res) => {
+  try {
+    await pool.query("BEGIN"); // Iniciar transacción
+
+    const { reparacion, repuestos, mecanicos } = req.body;
+
+    // 1. UPDATE en tabla Reparacion
+    const updateReparacionQuery = `
+      UPDATE Reparacion 
+      SET Descripcion = $1, Tiempo = $2, Estado = $3 
+      WHERE ID_Reparacion = $4
+      RETURNING *`;
+
+    const reparacionResult = await pool.query(updateReparacionQuery, [
+      reparacion.descripcion,
+      reparacion.tiempo,
+      reparacion.estado,
+      reparacion.id_reparacion,
+    ]);
+
+    // 2. DELETE e INSERT en RepuestosReparacion (para actualizar)
+    await pool.query(
+      "DELETE FROM RepuestosReparacion WHERE ID_Reparacion = $1",
+      [reparacion.id_reparacion]
+    );
+
+    for (const repuesto of repuestos) {
+      await pool.query(
+        "INSERT INTO RepuestosReparacion (ID_Repuesto, ID_Reparacion, Cantidad_Usada) VALUES ($1, $2, $3)",
+        [repuesto.id_repuesto, repuesto.id_reparacion, repuesto.cantidad_usada]
+      );
+    }
+
+    // 3. DELETE e INSERT en MecanicoRealizaReparacion (para actualizar)
+    await pool.query(
+      "DELETE FROM MecanicoRealizaReparacion WHERE ID_Reparacion = $1",
+      [reparacion.id_reparacion]
+    );
+
+    for (const mecanico of mecanicos) {
+      await pool.query(
+        "INSERT INTO MecanicoRealizaReparacion (ID_Mecanico, ID_Reparacion) VALUES ($1, $2)",
+        [mecanico.id_mecanico, mecanico.id_reparacion]
+      );
+    }
+
+    await pool.query("COMMIT"); // Confirmar transacción
+
+    res.status(200).json({
+      success: true,
+      message: "Reparación completada exitosamente",
+      data: {
+        reparacion: reparacionResult.rows[0],
+        repuestos_actualizados: repuestos.length,
+        mecanicos_asignados: mecanicos.length,
+      },
+    });
+  } catch (error) {
+    await pool.query("ROLLBACK"); // Revertir transacción en caso de error
+    console.error("Error al completar reparación:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error interno del servidor",
+      error: error.message,
+    });
+  }
+});
+
 module.exports = router;
