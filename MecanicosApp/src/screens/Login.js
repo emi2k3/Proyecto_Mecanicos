@@ -29,11 +29,11 @@ const Login = () => {
       if (token) {
         Alert.alert('Éxito', 'Inicio de sesión exitoso');
       } else {
-        Alert.alert('Error', 'Su cédula o contraseña es incorrecta');
+        Alert.alert('Error', 'Su cédula o contraseña es incorrecta.');
       }
     } catch (error) {
       console.error('Error en login:', error);
-      Alert.alert('Error', 'Su cédula o contraseña es incorrecta');
+      Alert.alert('Error', 'Su cédula o contraseña es incorrecta.');
     }
   
     setCedula('');

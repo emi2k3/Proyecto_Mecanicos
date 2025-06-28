@@ -3,6 +3,8 @@ const router = express.Router();
 const pool = require("../database/db");
 const { MecanicoSchema } = require("../schemas/mecanico.schema");
 const { validationResult, param } = require("express-validator");
+const bcrypt = require("bcrypt");
+
 
 // Conseguir todos los Mecanicos
 router.get("/", async (req, res) => {
@@ -58,7 +60,10 @@ router.post("/", MecanicoSchema, async (req, res) => {
 
   const { documento, nombre_completo, telefono, especializacion, id_turno, Contrasena } =
     req.body;
+  
   try {
+    const hashedPassword = await bcrypt.hash(Contrasena, 10);
+  
     const resultado = await pool.query(
       `
       WITH nueva_persona AS (
@@ -76,7 +81,7 @@ router.post("/", MecanicoSchema, async (req, res) => {
       FROM nuevo_Mecanico
       RETURNING *;
     `,
-      [documento, nombre_completo, telefono, especializacion, id_turno, Contrasena]
+      [documento, nombre_completo, telefono, especializacion, id_turno, hashedPassword]
     );
 
     return res.status(200).json({
