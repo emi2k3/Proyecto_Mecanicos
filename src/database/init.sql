@@ -9,6 +9,7 @@ CREATE TABLE Turno (
 CREATE TABLE Persona (
     ID_Persona SERIAL PRIMARY KEY,
     Documento VARCHAR(36) NOT NULL UNIQUE,
+    Rol CHAR(1) NOT NULL,
     Nombre_Completo VARCHAR(36) NOT NULL
 );
 
@@ -32,6 +33,8 @@ CREATE TABLE Vehiculo (
     ID_Vehiculo SERIAL PRIMARY KEY,
     Matricula VARCHAR(36) NOT NULL UNIQUE,
     Tipo VARCHAR(36) NOT NULL,
+    Marca VARCHAR(36) NOT NULL,
+    Modelo VARCHAR(36) NOT NULL,
     ID_Cliente INTEGER NOT NULL,
     FOREIGN KEY (ID_Cliente) REFERENCES Cliente(ID_Cliente) ON DELETE CASCADE
 );
@@ -42,6 +45,7 @@ CREATE TABLE Mecanico (
     Especializacion VARCHAR(36) NOT NULL,
     ID_Turno INTEGER NOT NULL,
     ID_Persona INTEGER NOT NULL UNIQUE,
+    Contrasena TEXT NOT NULL,
     FOREIGN KEY (ID_Turno) REFERENCES Turno(ID_Turno) ON DELETE CASCADE,
     FOREIGN KEY (ID_Persona) REFERENCES Persona(ID_Persona) ON DELETE CASCADE
 );
@@ -60,6 +64,7 @@ CREATE TABLE Reparacion (
     Descripcion VARCHAR(36) NOT NULL,
     Tiempo INTEGER NOT NULL CHECK (Tiempo > 0),
     ID_Vehiculo INTEGER NOT NULL,
+    Estado BOOLEAN DEFAULT FALSE, 
     FOREIGN KEY (ID_Vehiculo) REFERENCES Vehiculo(ID_Vehiculo) ON DELETE CASCADE
 );
 
@@ -177,11 +182,11 @@ INSERT INTO Turno (Nombre) VALUES
 ('Noche');
 
 -- Insertar Personas
-INSERT INTO Persona (Documento, Nombre_Completo) VALUES
-('12345678', 'Matías Pérez'),
-('23456789', 'Laura Gómez'),
-('34567890', 'Carlos Rodríguez'),
-('45678901', 'Ana Fernández');
+INSERT INTO Persona (Documento, Nombre_Completo,Rol) VALUES
+('12345678', 'Matías Pérez','2'),
+('23456789', 'Laura Gómez','1'),
+('34567890', 'Carlos Rodríguez','1'),
+('45678901', 'Ana Fernández','2');
 
 -- Insertar Teléfonos
 INSERT INTO Telefono (ID_Persona, Numero) VALUES
@@ -196,14 +201,15 @@ INSERT INTO Cliente (ID_Persona) VALUES
 (3);
 
 -- Insertar Vehículos
-INSERT INTO Vehiculo (Matricula, Tipo, ID_Cliente) VALUES
-('ABC123', 'Camioneta', 1),
-('XYZ789', 'Auto', 2);
+INSERT INTO Vehiculo (Matricula, Tipo, ID_Cliente, Marca, Modelo) VALUES
+('ABC123', 'Camioneta', 1, 'Renault', 'KWID'),
+('XYZ789', 'Auto', 2, 'Toyota', 'Crown Majesta 1996');
 
 -- Insertar Mecánicos (asociados a personas y turnos)
-INSERT INTO Mecanico (Especializacion, ID_Turno, ID_Persona) VALUES
-('Motores', 1, 1),  -- Matías Pérez
-('Frenos', 2, 4);   -- Ana Fernández
+-- ROL 1:CLIENTE  ROL 2:MECANICO  ROL 3:JEFE DE TALLER
+INSERT INTO Mecanico (Especializacion, ID_Turno, ID_Persona, Contrasena) VALUES
+('Motores', 1, 1, '$2b$10$Z2aNMZ3zAcDJOyebAguArOw.rqQ4oievmjbFGocWwBtxMLpg4dUCC'), -- Matias Pérez, contraseña sin encriptar (password123)
+('Frenos', 2, 4, '$2b$10$IiGyD39n4g1IRD3Kc3KDJu4QTJTRBKl.C9vfDDIEEdbh1Uzi1DurK'); -- Ana Fernández, contraseña sin encriptar (securepass456)
 
 -- Insertar Repuestos
 INSERT INTO Repuesto (Descripcion, Cantidad, Tipo) VALUES
@@ -225,3 +231,6 @@ INSERT INTO MecanicoRealizaReparacion (ID_Mecanico, ID_Reparacion) VALUES
 INSERT INTO RepuestosReparacion (ID_Repuesto, ID_Reparacion, Cantidad_Usada) VALUES
 (1, 1, 1),  -- 1 Filtro para reparación 1
 (2, 2, 2);  -- 2 Pastillas para reparación 2
+
+UPDATE Reparacion SET Estado = true WHERE ID_Reparacion = 1;
+UPDATE Reparacion SET Estado = true WHERE ID_Reparacion = 2;

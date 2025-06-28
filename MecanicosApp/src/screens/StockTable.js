@@ -26,17 +26,26 @@ const StockTable = ({navigation}) => {
         <Text style={[styles.headerText, styles.cantidadColumn]}>Cantidad</Text>
       </View>
 
-      {stockData.map((item, index) => (
-        
-        <ListItem key={index} bottomDivider containerStyle={{  borderBottomWidth: 1.5,
-          borderColor: '#ccc'}} >
-          <ListItem.Content style={styles.row}>
-            <Text style={[styles.cellText, styles.nombreColumn]}>{item.descripcion}</Text>
-            <Text style={[styles.cellText, styles.tipoColumn]}>{item.tipo}</Text>
-            <Text style={[styles.cellText, styles.cantidadColumn]}>{item.cantidad}</Text>
-          </ListItem.Content>
-        </ListItem>
-      ))}
+      {stockData.map((item, index) => {
+      const isOdd = index % 2 !== 0; 
+  return (
+    <ListItem 
+      key={index} 
+      bottomDivider 
+      containerStyle={{
+        borderBottomWidth: 1.5,
+        borderColor: '#ccc',
+        backgroundColor: isOdd ? '#E2E2E2' : '#ffffff' 
+      }}
+    >
+      <ListItem.Content style={styles.row}>
+        <Text style={[styles.cellText, styles.nombreColumn]}>{item.descripcion}</Text>
+        <Text style={[styles.cellText, styles.tipoColumn]}>{item.tipo}</Text>
+        <Text style={[styles.cellText, styles.cantidadColumn]}>{item.cantidad}</Text>
+      </ListItem.Content>
+    </ListItem>
+  );
+})}
     
     </ScrollView>
   

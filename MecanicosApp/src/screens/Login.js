@@ -8,32 +8,36 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-import { Header, Icon, Text } from '@rneui/themed';
+import { Text } from '@rneui/themed';
+import { LoginService } from '../services/login/LoginService';
 
-const CrearStock = () => {
-  const [descripcion, setDescripcion] = useState('');
-  const [cantidad, setCantidad] = useState('');
-  const [tipo, setTipo] = useState('');
+const Login = () => {
+  const [cedula, setCedula] = useState('');
+  const [contraseña, setContraseña] = useState('');
 
-  const handleCrear = () => {
-   
-    if (!descripcion || !cantidad || !tipo) {
-      Alert.alert('Error', 'Por favor completa todos los campos');
+  const handleLogin = async () => {
+    const logger= new LoginService();
+    if (!cedula || !contraseña ) {
+      Alert.alert('Error', 'Por favor, complete todos los campos.');
       return;
     }
     
-    console.log('Crear Stock:', {
-      descripcion,
-      cantidad,
-      tipo,
-    });
-    
-    //Dialogo de que se creo correctamente 
-    
-    // Limpiar formulario después de crear
-    setDescripcion('');
-    setCantidad('');
-    setTipo('');
+    try {
+      const token = await logger.login(cedula, contraseña);
+      console.log(token);
+      
+      if (token) {
+        Alert.alert('Éxito', 'Inicio de sesión exitoso');
+      } else {
+        Alert.alert('Error', 'Su cédula o contraseña es incorrecta');
+      }
+    } catch (error) {
+      console.error('Error en login:', error);
+      Alert.alert('Error', 'Su cédula o contraseña es incorrecta');
+    }
+  
+    setCedula('');
+    setContraseña('');
   };
 
   return (
@@ -44,45 +48,34 @@ const CrearStock = () => {
         <View style={styles.card}>
     
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Descripción/Nombre</Text>
+            <Text style={styles.label}>Cédula</Text>
             <TextInput
               style={styles.input}
-              placeholder="Descripción/Nombre"
-              value={descripcion}
-              onChangeText={setDescripcion}
+              placeholder="1.234.567-8"
+              value={cedula}
+              onChangeText={setCedula}
               placeholderTextColor="#999"
             />
           </View>
           
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Cantidad</Text>
+            <Text style={styles.label}>Contraseña</Text>
             <TextInput
               style={styles.input}
-              placeholder="Cantidad"
-              value={cantidad}
-              onChangeText={setCantidad}
-              keyboardType="numeric"
-              placeholderTextColor="#999"
-            />
-          </View>
-          
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Tipo</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Tipo"
-              value={tipo}
-              onChangeText={setTipo}
+              placeholder="Ingrese su contraseña"
+              value={contraseña}
+              onChangeText={setContraseña}
+              secureTextEntry={true}
               placeholderTextColor="#999"
             />
           </View>
           
           <TouchableOpacity
             style={styles.createButton}
-            onPress={handleCrear}
+            onPress={handleLogin}
             activeOpacity={0.8}
           >
-            <Text style={styles.buttonText}>Crear</Text>
+            <Text style={styles.buttonText}>Iniciar sesión</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -155,4 +148,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CrearStock;
+export default Login;
