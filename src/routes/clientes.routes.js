@@ -61,8 +61,8 @@ router.post("/", ClienteSchema, async (req, res) => {
     const resultado = await pool.query(
       `
       WITH nueva_persona AS (
-          INSERT INTO Persona (Documento, Nombre_Completo)
-          VALUES ($1, $2) 
+          INSERT INTO Persona (Documento, Nombre_Completo, Rol)
+          VALUES ($1, $2, 1) 
           RETURNING ID_Persona
       ),
       nuevo_cliente AS (

@@ -1,5 +1,5 @@
 import * as Keychain from 'react-native-keychain';
-import { FetchService } from '../FetchService';
+import { FetchService } from '../FetchServcice.js';
 
 export class LoginService {
     constructor() {

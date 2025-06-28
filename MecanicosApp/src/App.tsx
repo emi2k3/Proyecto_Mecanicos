@@ -9,11 +9,12 @@ import StockSearch from './screens/StockSearch';
 import AssignedCases from './screens/AssignedCases';
 import CustomDrawer from './componentes/CustomDrawer';
 import FinishedCases from './screens/FinishedCases';
+import Login from './screens/Login';
 
 const Drawer = createDrawerNavigator();
 function App(): React.JSX.Element {
 const screens = [ {name: "Ver Stock" , component: StockTable},{name: "Crear Stock" , component: CrearStock}, {name: "Buscar Stock" , component: StockSearch},
-{name: "Asignar" , component: AssignedCases}, {name: "Casos Terminados" , component: FinishedCases}]
+{name: "Asignar" , component: AssignedCases}, {name: "Casos Terminados" , component: FinishedCases}, {name: "Login" , component: Login}]
   return (
 
       <NavigationContainer>

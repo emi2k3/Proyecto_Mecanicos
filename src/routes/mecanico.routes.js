@@ -56,7 +56,7 @@ router.post("/", MecanicoSchema, async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { documento, nombre_completo, telefono, especializacion, id_turno } =
+  const { documento, nombre_completo, telefono, especializacion, id_turno, Contrasena } =
     req.body;
   try {
     const resultado = await pool.query(
@@ -67,8 +67,8 @@ router.post("/", MecanicoSchema, async (req, res) => {
           RETURNING ID_Persona
       ),
       nuevo_mecanico AS (
-          INSERT INTO Mecanico (Especializacion, ID_Turno, ID_Persona)
-          VALUES ($4, $5, (SELECT ID_Persona FROM nueva_persona))
+          INSERT INTO Mecanico (Especializacion, ID_Turno, Contrasena, ID_Persona)
+          VALUES ($4, $5, $6,(SELECT ID_Persona FROM nueva_persona))
           RETURNING ID_Persona
       )
       INSERT INTO Telefono (ID_Persona, Numero)
@@ -76,7 +76,7 @@ router.post("/", MecanicoSchema, async (req, res) => {
       FROM nuevo_Mecanico
       RETURNING *;
     `,
-      [documento, nombre_completo, telefono, especializacion, id_turno]
+      [documento, nombre_completo, telefono, especializacion, id_turno, Contrasena]
     );
 
     return res.status(200).json({

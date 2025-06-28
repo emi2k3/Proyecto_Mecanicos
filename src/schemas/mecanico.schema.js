@@ -19,6 +19,16 @@ const MecanicoSchema = [
     .withMessage("El ID del turno debe ser un número válido")
     .isIn([1, 2, 3])
     .withMessage("El ID del turno debe ser válido"),
+
+    body("Contrasena")
+    .notEmpty()
+    .withMessage("La contraseña es requerido")
+    .isString()
+    .withMessage("La contraseña debe ser texto")
+    .isLength({ max: 36, min:5 })
+    .withMessage("La contraseña no puede exceder 36 caracteres y debe tener un mínimo de 5 caracteres")
+    .matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z0-9]{5,}$").withMessage("Debe tener al menos una letra mayuscula y minúscula, además de un número."),
+    
 ];
 
 module.exports = {
