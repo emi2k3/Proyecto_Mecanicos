@@ -53,6 +53,23 @@ export class FetchService {
     }
   }
 
+  async delete(url, id) {
+    try {
+      const response = await fetch(`${this.BASE_URL}${url}/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('No se pudo hacer el fetch de manera correcta.');
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   async post(url, body) {
     try {
       const response = await fetch(`${this.BASE_URL}${url}`, {
