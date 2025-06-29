@@ -79,6 +79,94 @@ router.get(
   }
 );
 
+router.get(
+  "/:id/completa",
+  [param("id").isInt().withMessage("El ID debe ser un número entero")],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    } else {
+      const ID_Reparacion = req.params.id;
+      try {
+        const resultado = await pool.query(
+          `
+          WITH repuestos_distinct AS (
+            SELECT DISTINCT 
+              r.ID_Reparacion,
+              rep.ID_Repuesto,
+              rep.Descripcion as rep_descripcion,
+              rr.Cantidad_Usada
+            FROM Reparacion r
+            LEFT JOIN RepuestosReparacion rr ON r.ID_Reparacion = rr.ID_Reparacion
+            LEFT JOIN Repuesto rep ON rr.ID_Repuesto = rep.ID_Repuesto
+            WHERE r.ID_Reparacion = $1
+          ),
+          mecanicos_distinct AS (
+            SELECT DISTINCT 
+              r.ID_Reparacion,
+              m.ID_Mecanico,
+              p.Nombre_Completo
+            FROM Reparacion r
+            LEFT JOIN MecanicoRealizaReparacion mrr ON r.ID_Reparacion = mrr.ID_Reparacion
+            LEFT JOIN Mecanico m ON mrr.ID_Mecanico = m.ID_Mecanico
+            LEFT JOIN Persona p ON m.ID_Persona = p.ID_Persona
+            WHERE r.ID_Reparacion = $1
+          )
+          SELECT 
+            r.Descripcion,
+            r.Tiempo,
+            r.ID_Vehiculo,
+            r.Estado,
+            v.Matricula,
+            
+            -- Agregar repuestos como array JSON
+            COALESCE(
+              (SELECT JSON_AGG(
+                JSON_BUILD_OBJECT(
+                  'nombre', rep_descripcion,
+                  'cantidad_usada', Cantidad_Usada
+                )
+              ) FROM repuestos_distinct WHERE ID_Repuesto IS NOT NULL),
+              '[]'::json
+            ) as repuestos,
+            
+            -- Agregar mecánicos como array JSON
+            COALESCE(
+              (SELECT JSON_AGG(
+                JSON_BUILD_OBJECT(
+                  'id', ID_Mecanico,
+                  'nombre_completo', Nombre_Completo
+                )
+              ) FROM mecanicos_distinct WHERE ID_Mecanico IS NOT NULL),
+              '[]'::json
+            ) as mecanicos
+
+          FROM Reparacion r
+          LEFT JOIN Vehiculo v ON r.ID_Vehiculo = v.ID_Vehiculo
+          WHERE r.ID_Reparacion = $1
+          `,
+          [ID_Reparacion]
+        );
+
+        if (resultado.rowCount === 0) {
+          return res
+            .status(404)
+            .json({ message: "No existe una reparación con ese ID." });
+        }
+
+        return res.status(200).json({
+          message: "Reparación encontrada",
+          data: resultado.rows[0],
+        });
+      } catch (error) {
+        console.error("Error en consulta de reparación completa:", error);
+        return res.status(500).json({ message: error.message });
+      }
+    }
+  }
+);
+
 router.post("/", ReparacionSchema, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

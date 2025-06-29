@@ -173,6 +173,16 @@ export class reparacionService {
     }
   }
 
+  async getCompletedReparacionById(id) {
+    try {
+      const response = await this.Servicio.get(`reparaciones/${id}/completa`);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
   /**
    * Obtener el estado de una reparación
    * @param {number} id - ID de la reparación

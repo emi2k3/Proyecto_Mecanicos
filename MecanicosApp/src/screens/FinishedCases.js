@@ -39,6 +39,11 @@ const FinishedCases = ({navigation}) => {
     }, []),
   );
 
+  const handleNavigateToDetail = reparacionId => {
+    console.log('Navigating to detail for reparacionId:', reparacionId);
+    navigation.navigate('Informe Completo', {id: reparacionId});
+  };
+
   return (
     <ScrollView>
       {finishedCases.map((item, index) => {
@@ -52,8 +57,16 @@ const FinishedCases = ({navigation}) => {
             ]}>
             <ListItem.Content>
               <View style={styles.mainContainer}>
-                <TouchableOpacity style={styles.iconContainer}>
-                  <Icon name="clipboard" type="feather" size={50} />
+                <TouchableOpacity
+                  style={styles.iconContainer}
+                  onPress={() => handleNavigateToDetail(item.id_reparacion)}
+                  activeOpacity={0.7}>
+                  <Icon
+                    name="clipboard"
+                    type="feather"
+                    size={50}
+                    color="#3498db"
+                  />
                 </TouchableOpacity>
 
                 <View style={styles.textContainer}>
@@ -102,6 +115,8 @@ const styles = StyleSheet.create({
   iconContainer: {
     marginRight: 15,
     marginTop: 45,
+    padding: 5, // Agregar padding para mejor área de toque
+    borderRadius: 5,
   },
 
   textContainer: {
