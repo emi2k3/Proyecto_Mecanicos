@@ -30,6 +30,7 @@ function App(): React.JSX.Element {
     {name: 'Ver Stock', component: StockTable},
     {name: 'Crear Stock', component: CrearStock},
     {name: 'Buscar Stock', component: StockSearch},
+    {name: 'Nuevo Caso', component: NewCase},
     {name: 'Casos Terminados', component: FinishedCases},
     {name: 'Casos Asignados', component: AssignedCases},
     {name: 'Crear Vehiculos', component: CrearVehiculos},

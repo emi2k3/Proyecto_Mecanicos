@@ -184,8 +184,8 @@ INSERT INTO Turno (Nombre) VALUES
 -- Insertar Personas
 INSERT INTO Persona (Documento, Nombre_Completo,Rol) VALUES
 ('12345678', 'Matías Pérez','2'),
-('23456789', 'Laura Gómez','1'),
-('34567890', 'Carlos Rodríguez','1'),
+('81218361', 'Laura Gómez','1'),
+('95347871', 'Carlos Rodríguez','1'),
 ('45678901', 'Ana Fernández','2');
 
 -- Insertar Teléfonos
@@ -202,8 +202,8 @@ INSERT INTO Cliente (ID_Persona) VALUES
 
 -- Insertar Vehículos
 INSERT INTO Vehiculo (Matricula, Tipo, ID_Cliente, Marca, Modelo) VALUES
-('ABC123', 'Camioneta', 1, 'Renault', 'KWID'),
-('XYZ789', 'Auto', 2, 'Toyota', 'Crown Majesta 1996');
+('ABC 1234', 'Camioneta', 1, 'Renault', 'KWID'),
+('XYZ 7890', 'Auto', 2, 'Toyota', 'Crown Majesta 1996');
 
 -- Insertar Mecánicos (asociados a personas y turnos)
 -- ROL 1:CLIENTE  ROL 2:MECANICO  ROL 3:JEFE DE TALLER

@@ -66,65 +66,25 @@ export const validateRUT = rut => {
 };
 
 /**
- * Formatea CI uruguaya (agregar puntos y guión)
- * @param {string} text - Texto a formatear
- * @returns {string} - CI formateada
+ * Limpia CI uruguaya (remueve puntos y guiones)
+ * @param {string} text - CI formateada o sin formatear
+ * @returns {string} - CI sin formato (solo números)
  */
 export const formatCI = text => {
-  const cleaned = text.replace(/[^0-9]/g, '');
-
-  if (cleaned.length <= 1) return cleaned;
-  if (cleaned.length <= 4) return cleaned.slice(0, 1) + '.' + cleaned.slice(1);
-  if (cleaned.length <= 7)
-    return (
-      cleaned.slice(0, 1) + '.' + cleaned.slice(1, 4) + '.' + cleaned.slice(4)
-    );
-  return (
-    cleaned.slice(0, 1) +
-    '.' +
-    cleaned.slice(1, 4) +
-    '.' +
-    cleaned.slice(4, 7) +
-    '-' +
-    cleaned.slice(7, 8)
-  );
+  return text.replace(/[^0-9]/g, '');
 };
 
 /**
- * Formatea RUT uruguayo
+ * Formatea RUT uruguayo (solo números)
  * @param {string} text - Texto a formatear
- * @returns {string} - RUT formateado
+ * @returns {string} - RUT formateado sin puntos ni guiones
  */
 export const formatRUT = text => {
+  // Extraer solo números
   const cleaned = text.replace(/[^0-9]/g, '');
 
-  if (cleaned.length <= 2) return cleaned;
-  if (cleaned.length <= 5) return cleaned.slice(0, 2) + '.' + cleaned.slice(2);
-  if (cleaned.length <= 8)
-    return (
-      cleaned.slice(0, 2) + '.' + cleaned.slice(2, 5) + '.' + cleaned.slice(5)
-    );
-  if (cleaned.length <= 11)
-    return (
-      cleaned.slice(0, 2) +
-      '.' +
-      cleaned.slice(2, 5) +
-      '.' +
-      cleaned.slice(5, 8) +
-      '-' +
-      cleaned.slice(8)
-    );
-  return (
-    cleaned.slice(0, 2) +
-    '.' +
-    cleaned.slice(2, 5) +
-    '.' +
-    cleaned.slice(5, 8) +
-    '-' +
-    cleaned.slice(8, 11) +
-    '-' +
-    cleaned.slice(11, 12)
-  );
+  // Limitar a 12 dígitos máximo para RUT uruguayo
+  return cleaned.slice(0, 12);
 };
 
 /**

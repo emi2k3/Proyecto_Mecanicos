@@ -8,6 +8,7 @@ import {
   formatDocumento,
   validateNewCaseForm,
 } from '../services/Validations';
+import {reparacionService} from '../services/reparacion/reparacionService';
 
 const NewCase = ({navigation}) => {
   const [matricula, setMatricula] = useState('');
@@ -15,6 +16,10 @@ const NewCase = ({navigation}) => {
   const [descripcion, setDescripcion] = useState('');
   const [matriculaError, setMatriculaError] = useState('');
   const [documentoError, setDocumentoError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Instanciar el servicio
+  const reparacionSvc = new reparacionService();
 
   const handleMatriculaChange = text => {
     const formatted = formatMatricula(text);
@@ -68,7 +73,7 @@ const NewCase = ({navigation}) => {
     }
   };
 
-  const handleRegistrar = () => {
+  const handleRegistrar = async () => {
     const formData = {
       matricula,
       documento,
@@ -85,24 +90,49 @@ const NewCase = ({navigation}) => {
       return;
     }
 
-    // Aquí iría la lógica para enviar los datos
-    console.log('Datos a enviar:', formData);
+    setIsLoading(true);
 
-    Alert.alert('Éxito', 'Ingreso registrado correctamente', [
-      {
-        text: 'OK',
-        onPress: () => {
-          // Limpiar formulario
-          setMatricula('');
-          setDocumento('');
-          setDescripcion('');
-          setMatriculaError('');
-          setDocumentoError('');
-          // Opcional: navegar de vuelta
-          // navigation.goBack();
+    try {
+      console.log('Enviando datos:', formData);
+
+      const response = await reparacionSvc.crearReparacion(formData);
+
+      Alert.alert('Éxito', 'Reparación registrada correctamente', [
+        {
+          text: 'OK',
+          onPress: () => {
+            // Limpiar formulario
+            setMatricula('');
+            setDocumento('');
+            setDescripcion('');
+            setMatriculaError('');
+            setDocumentoError('');
+            // Opcional: navegar de vuelta
+            // navigation.goBack();
+          },
         },
-      },
-    ]);
+      ]);
+    } catch (error) {
+      console.error('Error al registrar reparación:', error);
+
+      // Mostrar mensaje de error específico
+      let errorMessage = 'Error al registrar la reparación';
+
+      if (error.message.includes('No se encontró un vehículo')) {
+        errorMessage =
+          'No se encontró un vehículo con esa matrícula que pertenezca al cliente';
+      } else if (
+        error.message.includes('red') ||
+        error.message.includes('network')
+      ) {
+        errorMessage =
+          'Error de conexión. Verifique su internet e intente nuevamente';
+      }
+
+      Alert.alert('Error', errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -128,6 +158,7 @@ const NewCase = ({navigation}) => {
             containerStyle={styles.inputContainer}
             errorMessage={matriculaError}
             errorStyle={styles.errorText}
+            editable={!isLoading}
           />
 
           {/* C.I./RUT Field */}
@@ -135,7 +166,7 @@ const NewCase = ({navigation}) => {
             label="C.I./RUT"
             value={documento}
             onChangeText={handleDocumentoChange}
-            placeholder="1.234.567-8 o 21.234.567-001-2"
+            placeholder="12345678 o 212345670012"
             keyboardType="numeric"
             maxLength={17}
             labelStyle={styles.label}
@@ -147,6 +178,7 @@ const NewCase = ({navigation}) => {
             containerStyle={styles.inputContainer}
             errorMessage={documentoError}
             errorStyle={styles.errorText}
+            editable={!isLoading}
           />
 
           {/* Descripción Field */}
@@ -160,14 +192,20 @@ const NewCase = ({navigation}) => {
             inputContainerStyle={[styles.input, styles.textAreaContainer]}
             inputStyle={[{fontSize: 16, color: '#333'}, styles.textAreaStyle]}
             containerStyle={styles.inputContainer}
+            editable={!isLoading}
           />
 
           {/* Submit Button */}
           <Button
-            title="Registrar"
+            title={isLoading ? 'Registrando...' : 'Registrar'}
             onPress={handleRegistrar}
-            buttonStyle={styles.createButton}
+            buttonStyle={[
+              styles.createButton,
+              isLoading && styles.buttonDisabled,
+            ]}
             titleStyle={styles.buttonText}
+            disabled={isLoading}
+            loading={isLoading}
           />
         </View>
       </ScrollView>
@@ -238,6 +276,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 3,
+  },
+  buttonDisabled: {
+    backgroundColor: '#bdc3c7',
+    shadowOpacity: 0,
+    elevation: 0,
   },
   buttonText: {
     color: '#fff',
