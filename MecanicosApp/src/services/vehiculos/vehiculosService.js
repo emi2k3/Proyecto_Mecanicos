@@ -14,4 +14,24 @@ export class vehiculosService {
       return false;
     }
   }
+
+  async getAllVehiculos() {
+    try {
+      const response = await this.Servicio.get('vehiculos');
+      return response.message;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
+
+  async eliminarVehiculo(id) {
+    try {
+      await this.Servicio.delete('vehiculos', id);
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
 }

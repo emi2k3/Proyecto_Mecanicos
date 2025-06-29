@@ -14,6 +14,15 @@ export class clientesService {
       return [];
     }
   }
+  async getClienteByID(id) {
+    try {
+      const response = await this.Servicio.getByID('clientes', id);
+      return response.message;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
   getClienteByDocumento(arrayClientes, documento) {
     return arrayClientes.filter(cliente => cliente.documento == documento);
   }

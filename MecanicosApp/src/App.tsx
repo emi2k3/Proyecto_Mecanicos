@@ -18,6 +18,7 @@ import {tokenService} from './services/token/tokenService';
 import Menu from './screens/Menu';
 import {AuthProvider, useAuth} from './context/authContext';
 import CrearVehiculos from './screens/CrearVehiculos';
+import EliminarVehiculo from './screens/EliminarVehiculo';
 
 const Drawer = createDrawerNavigator();
 
@@ -34,6 +35,7 @@ function App(): React.JSX.Element {
     {name: 'Casos Asignados', component: AssignedCases},
     {name: 'Crear Vehiculos', component: CrearVehiculos},
     {name: 'Menu', component: Menu},
+    {name: 'Eliminar Vehiculos', component: EliminarVehiculo},
   ];
   const screensJefe = [
     {name: 'Ver Stock', component: StockTable},
