@@ -31,8 +31,8 @@ const personaSchema = [
     .withMessage("El teléfono es requerido")
     .isString()
     .withMessage("El teléfono debe ser texto")
-    .matches(/^[0-9]{9}$/)
-    .withMessage("El teléfono debe tener 9 dígitos"),
+    .matches(/^\+?[0-9]{8,12}$/)
+    .withMessage("El teléfono debe tener al menos 8 dígitos"),
 ];
 
 module.exports = { personaSchema };

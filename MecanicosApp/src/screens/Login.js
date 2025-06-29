@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   TextInput,
@@ -8,56 +8,64 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-import { Text } from '@rneui/themed';
-import { LoginService } from '../services/login/LoginService';
+import {Text} from '@rneui/themed';
+import {LoginService} from '../services/login/LoginService';
+import {useAuth} from '../context/authContext';
+import {tokenService} from '../services/token/tokenService';
 
-const Login = () => {
+const Login = ({navigation}) => {
   const [cedula, setCedula] = useState('');
   const [contraseña, setContraseña] = useState('');
+  const {setRol} = useAuth();
 
   const handleLogin = async () => {
-    const logger= new LoginService();
-    if (!cedula || !contraseña ) {
+    const logger = new LoginService();
+    const decoder = new tokenService();
+
+    if (!cedula || !contraseña) {
       Alert.alert('Error', 'Por favor, complete todos los campos.');
       return;
     }
-    
+
     try {
       const token = await logger.login(cedula, contraseña);
-      console.log(token);
-      
+
       if (token) {
-        Alert.alert('Éxito', 'Inicio de sesión exitoso');
+        const rol = await decoder.extractTokenData(token);
+
+        setRol(rol);
       } else {
-        Alert.alert('Error', 'Su cédula o contraseña es incorrecta.');
+        Alert.alert('Error', 'La cédula o contraseña ingresada es incorrecta.');
       }
     } catch (error) {
       console.error('Error en login:', error);
-      Alert.alert('Error', 'Su cédula o contraseña es incorrecta.');
+      Alert.alert('Error', 'La cédula o contraseña ingresada es incorrecta.');
     }
-  
+
     setCedula('');
     setContraseña('');
   };
 
+  const cedulaCheck = input => {
+    const numbersOnly = input.replace(/[^0-9]/g, '');
+    setCedula(numbersOnly);
+  };
+
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-    >
+    <KeyboardAvoidingView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.card}>
-    
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Cédula</Text>
             <TextInput
               style={styles.input}
               placeholder="1.234.567-8"
               value={cedula}
-              onChangeText={setCedula}
+              onChangeText={cedulaCheck}
               placeholderTextColor="#999"
             />
           </View>
-          
+
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Contraseña</Text>
             <TextInput
@@ -69,12 +77,11 @@ const Login = () => {
               placeholderTextColor="#999"
             />
           </View>
-          
+
           <TouchableOpacity
             style={styles.createButton}
             onPress={handleLogin}
-            activeOpacity={0.8}
-          >
+            activeOpacity={0.8}>
             <Text style={styles.buttonText}>Iniciar sesión</Text>
           </TouchableOpacity>
         </View>
@@ -91,7 +98,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     padding: 20,
-
   },
   card: {
     backgroundColor: '#fff',
@@ -105,7 +111,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    marginTop: 75
+    marginTop: 75,
   },
   inputContainer: {
     marginBottom: 20,
