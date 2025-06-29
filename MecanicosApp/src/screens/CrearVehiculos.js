@@ -10,33 +10,53 @@ import {
 } from 'react-native';
 import {Text} from '@rneui/themed';
 import {vehiculosService} from '../services/vehiculos/vehiculosService';
+import {clientesService} from '../services/clientes/clientesService';
+import {ColorSpace} from 'react-native-reanimated';
 
 const CrearVehiculos = () => {
   const [matricula, setMatricula] = useState('');
   const [marca, setMarca] = useState('');
   const [tipo, setTipo] = useState('');
   const [modelo, setModelo] = useState('');
-  const [ID_Cliente, setID_CLiente] = useState(0);
+  const [documento, setDocuemento] = useState('');
+
   const creador = new vehiculosService();
-  const handleCrear = () => {
-    if (!modelo || !marca || !tipo || !matricula || !ID_Cliente) {
+  const buscador = new clientesService();
+  const handleCrear = async () => {
+    if (!modelo || !marca || !tipo || !matricula || !documento) {
       Alert.alert('Error', 'Por favor completa todos los campos');
       return;
     } else {
-      creador.postVehiculos({
+      let clientes = await buscador.getAllClientes();
+      let clienteEncontrado = buscador.getClienteByDocumento(
+        clientes,
+        documento,
+      );
+      if (!clienteEncontrado || clienteEncontrado.length === 0) {
+        Alert.alert('Error', 'No se encontró un cliente con ese documento');
+        return;
+      }
+      let id = clienteEncontrado[0].id_cliente;
+      let estado = await creador.postVehiculos({
         matricula: matricula,
         tipo: tipo,
         marca: marca,
         modelo: modelo,
-        id_cliente: ID_Cliente,
+        id_cliente: id,
       });
-      Alert.alert('Exito', 'El vehiculo fue creado correctamente');
-      // Falta manejar mejor los errores.
-      setMarca('');
-      setMatricula('');
-      setModelo('');
-      setTipo('');
-      setID_CLiente(0);
+      if (estado) {
+        Alert.alert('Exito', 'El vehiculo fue creado correctamente');
+        setMarca('');
+        setMatricula('');
+        setModelo('');
+        setTipo('');
+        setDocuemento('');
+      } else {
+        Alert.alert(
+          'Error',
+          'Hubo un error al crear el vehículo, revise si un auto con esta matrícula ya esta ingresado.',
+        );
+      }
     }
   };
 
@@ -89,12 +109,12 @@ const CrearVehiculos = () => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>ID_Cliente ESTO ES SOLO POR AHORA</Text>
+            <Text style={styles.label}>Documento</Text>
             <TextInput
               style={styles.input}
-              placeholder="1"
-              value={ID_Cliente}
-              onChangeText={setID_CLiente}
+              placeholder="12345678"
+              value={documento}
+              onChangeText={setDocuemento}
               placeholderTextColor="#999"
             />
           </View>
@@ -132,7 +152,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    marginTop: 75,
+    marginTop: 25,
   },
   inputContainer: {
     marginBottom: 20,
