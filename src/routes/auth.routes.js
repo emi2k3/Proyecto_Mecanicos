@@ -12,6 +12,7 @@ router.post("/login", async (req, res) => {
         SELECT 
             m.ID_Mecanico,
             m.Contrasena,
+            p.rol,
             p.Nombre_Completo AS nombre
         FROM 
             Mecanico m
@@ -43,6 +44,7 @@ router.post("/login", async (req, res) => {
         id: mecanico.id_mecanico,
         nombre: mecanico.nombre,
         documento: document,
+        rol: mecanico.rol,
       },
       JWT_SECRET,
       { expiresIn: "8h" }
