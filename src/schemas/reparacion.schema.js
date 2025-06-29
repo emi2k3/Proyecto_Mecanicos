@@ -6,8 +6,8 @@ const ReparacionSchema = [
     .withMessage("La descripcion es requerido")
     .isString()
     .withMessage("La descripcion debe ser texto")
-    .isLength({ max: 36 })
-    .withMessage("La descripcion no puede exceder 36 caracteres"),
+    .isLength({ max: 256 })
+    .withMessage("La descripcion no puede exceder 256 caracteres"),
 
   body("tiempo")
     .notEmpty()

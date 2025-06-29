@@ -10,7 +10,7 @@ services:
     volumes:
       - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - app-network
 
@@ -24,7 +24,7 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=3000
-      - PGUSER=${DB_USER}         
+      - PGUSER=${DB_USER}
       - PGPASSWORD=${DB_PASSWORD}
       - PGDATABASE=${DB_DATABASE}
       - PGHOST=${DB_HOST}

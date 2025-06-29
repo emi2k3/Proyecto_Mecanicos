@@ -33,4 +33,14 @@ export class repuestoService
     }
     
    }
+
+    async createNewRepuesto(body) {
+        try {
+            const response = await this.Servicio.post('repuestos', body);
+            return response;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 }

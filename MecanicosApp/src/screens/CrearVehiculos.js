@@ -8,52 +8,35 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-import {Text, Dialog} from '@rneui/themed';
-import {repuestoService} from '../services/repuesto/repuestoService';
+import {Text} from '@rneui/themed';
+import {vehiculosService} from '../services/vehiculos/vehiculosService';
 
-const servicio = new repuestoService();
-
-const CrearStock = () => {
-  const [confirmarVisibile, setconfirmarVisibile] = useState(false);
-  const [descripcion, setDescripcion] = useState('');
-  const [cantidad, setCantidad] = useState('');
+const CrearVehiculos = () => {
+  const [matricula, setMatricula] = useState('');
+  const [marca, setMarca] = useState('');
   const [tipo, setTipo] = useState('');
-
-  const dialog = () => {
-    setconfirmarVisibile(!confirmarVisibile);
-  };
-
-  const handleCrear = async () => {
-    if (!descripcion || !cantidad || !tipo) {
+  const [modelo, setModelo] = useState('');
+  const [ID_Cliente, setID_CLiente] = useState(0);
+  const creador = new vehiculosService();
+  const handleCrear = () => {
+    if (!modelo || !marca || !tipo || !matricula || !ID_Cliente) {
       Alert.alert('Error', 'Por favor completa todos los campos');
       return;
-    }
-
-    const nuevoRepuesto = {
-      descripcion,
-      cantidad: parseInt(cantidad),
-      tipo,
-    };
-
-    try {
-      await servicio.createNewRepuesto(nuevoRepuesto);
-      Alert.alert('Éxito', 'Repuesto creado correctamente');
-
-      console.log('Crear Stock:', {
-        descripcion,
-        cantidad,
-        tipo,
+    } else {
+      creador.postVehiculos({
+        matricula: matricula,
+        tipo: tipo,
+        marca: marca,
+        modelo: modelo,
+        id_cliente: ID_Cliente,
       });
-
-      dialog();
-
-      // Limpiar formulario
-      setDescripcion('');
-      setCantidad('');
+      Alert.alert('Exito', 'El vehiculo fue creado correctamente');
+      // Falta manejar mejor los errores.
+      setMarca('');
+      setMatricula('');
+      setModelo('');
       setTipo('');
-    } catch (error) {
-      console.error('Error al crear el repuesto:', error);
-      Alert.alert('Error', 'Hubo un problema al crear el repuesto');
+      setID_CLiente(0);
     }
   };
 
@@ -62,24 +45,23 @@ const CrearStock = () => {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.card}>
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Descripción/Nombre</Text>
+            <Text style={styles.label}>Marca</Text>
             <TextInput
               style={styles.input}
-              placeholder="Descripción/Nombre"
-              value={descripcion}
-              onChangeText={setDescripcion}
+              placeholder="Marca"
+              value={marca}
+              onChangeText={setMarca}
               placeholderTextColor="#999"
             />
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Cantidad</Text>
+            <Text style={styles.label}>Modelo</Text>
             <TextInput
               style={styles.input}
-              placeholder="Cantidad"
-              value={cantidad}
-              onChangeText={setCantidad}
-              keyboardType="numeric"
+              placeholder="Modelo"
+              value={modelo}
+              onChangeText={setModelo}
               placeholderTextColor="#999"
             />
           </View>
@@ -95,21 +77,35 @@ const CrearStock = () => {
             />
           </View>
 
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Matrícula</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Matrícula"
+              value={matricula}
+              onChangeText={setMatricula}
+              placeholderTextColor="#999"
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>ID_Cliente ESTO ES SOLO POR AHORA</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="1"
+              value={ID_Cliente}
+              onChangeText={setID_CLiente}
+              placeholderTextColor="#999"
+            />
+          </View>
+
           <TouchableOpacity
             style={styles.createButton}
-            onPress={dialog}
+            onPress={handleCrear}
             activeOpacity={0.8}>
             <Text style={styles.buttonText}>Crear</Text>
           </TouchableOpacity>
         </View>
-
-        <Dialog isVisible={confirmarVisibile} onBackdropPress={dialog}>
-          <Dialog.Title title="¿Quiere confirmar el ingreso de un nuevo repuesto?" />
-          <Dialog.Actions>
-            <Dialog.Button title="Cancelar" onPress={dialog} />
-            <Dialog.Button title="Aceptar" onPress={handleCrear} />
-          </Dialog.Actions>
-        </Dialog>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -179,4 +175,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CrearStock;
+export default CrearVehiculos;

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Dialog } from '@rneui/themed';
 import { repuestoService } from '../services/repuesto/repuestoService';
-import { Header, Icon, Text } from '@rneui/themed';
+import { Text } from '@rneui/themed';
 
 
 const StockSearch = () => {
