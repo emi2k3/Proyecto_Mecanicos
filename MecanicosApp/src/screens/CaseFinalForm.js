@@ -12,7 +12,7 @@ import {repuestoService} from '../services/repuesto/repuestoService';
 import {mecanicosService} from '../services/mecanicos/mecanicosService';
 import {reparacionService} from '../services/reparacion/reparacionService';
 
-const CaseFinalForm = ({route}) => {
+const CaseFinalForm = ({navigation, route}) => {
   // Datos de navegación
   const reparacionData = route?.params || {};
   const {reparacionId, vehiculo, reparacion} = reparacionData;
@@ -24,6 +24,19 @@ const CaseFinalForm = ({route}) => {
     tiempoReparacion: '',
     descripcion: reparacion?.descripcion || '',
   });
+
+  const limpiarFormulario = () => {
+    setFormData({
+      selectedRepuesto: '',
+      cantidad: '',
+      tiempoReparacion: '',
+      descripcion: '',
+    });
+  };
+
+  const handleNavigate = () => {
+    navigation.navigate('Casos Terminados');
+  };
 
   // Estados de los items agregados
   const [repuestosAgregados, setRepuestosAgregados] = useState([]);
@@ -125,8 +138,10 @@ const CaseFinalForm = ({route}) => {
     updateUiState('showRepuestoDropdown', false);
   };
 
-  const removeRepuesto = index => {
-    setRepuestosAgregados(prev => prev.filter((_, i) => i !== index));
+  const removeRepuesto = indexToRemove => {
+    setRepuestosAgregados(prev =>
+      prev.filter((_, index) => index !== indexToRemove),
+    );
   };
 
   // Handlers para mecánicos
@@ -146,14 +161,9 @@ const CaseFinalForm = ({route}) => {
     updateUiState('showMecanicoDropdown', false);
   };
 
-  const removeMecanico = mecanicoToRemove => {
+  const removeMecanico = indexToRemove => {
     setSelectedMecanicos(prev =>
-      prev.filter(m => {
-        if (typeof m === 'object' && typeof mecanicoToRemove === 'object') {
-          return m.id !== mecanicoToRemove.id;
-        }
-        return m !== mecanicoToRemove;
-      }),
+      prev.filter((_, index) => index !== indexToRemove),
     );
   };
 
@@ -191,6 +201,10 @@ const CaseFinalForm = ({route}) => {
 
       alert('¡Reparación completada exitosamente!');
       console.log('Resultado:', resultado);
+
+      // Limpiar el formulario
+      limpiarFormulario();
+      handleNavigate();
 
       // Aquí puedes navegar a otra pantalla o limpiar el formulario
       // navigation.goBack(); // Si usas React Navigation

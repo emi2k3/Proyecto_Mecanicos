@@ -46,8 +46,7 @@ const AssignedCases = ({navigation}) => {
   );
 
   const handleCompletarInforme = reparacion => {
-    // Navegar a la pantalla "Informe Completo" con los datos de la reparación
-    navigation.navigate('Informe Completo', {
+    navigation.navigate('Formulario de reparación', {
       reparacionId: reparacion.id_reparacion,
       vehiculo: reparacion.vehiculo,
       reparacion: reparacion,

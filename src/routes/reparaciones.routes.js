@@ -119,6 +119,8 @@ router.get(
             r.ID_Vehiculo,
             r.Estado,
             v.Matricula,
+            v.Marca,
+            v.Modelo,
             
             -- Agregar repuestos como array JSON
             COALESCE(

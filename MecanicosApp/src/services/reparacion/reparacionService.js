@@ -78,7 +78,7 @@ export class reparacionService {
       // Datos para UPDATE en tabla Reparacion
       reparacion: {
         id_reparacion: reparacionId,
-        descripcion: descripcion?.substring(0, 36) || '', // Limitar a 36 caracteres según BD
+        descripcion: descripcion?.substring(0, 256) || '',
         tiempo: parseInt(tiempoReparacion) || 0,
         id_vehiculo: vehiculo?.id || vehiculo?.ID_Vehiculo,
         estado: true, // Marcar como completada
@@ -116,8 +116,8 @@ export class reparacionService {
       errores.push('Descripción es requerida');
     }
 
-    if (formData.descripcion && formData.descripcion.length > 36) {
-      errores.push('Descripción no puede exceder 36 caracteres');
+    if (formData.descripcion && formData.descripcion.length > 256) {
+      errores.push('Descripción no puede exceder 256 caracteres');
     }
 
     if (
