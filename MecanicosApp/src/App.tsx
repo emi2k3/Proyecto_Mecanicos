@@ -1,5 +1,5 @@
 import '../gesture-handler.native';
-import React, {use, useEffect, useState} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import StockTable from './screens/StockTable';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -13,12 +13,14 @@ import CaseFinalForm from './screens/CaseFinalForm';
 import NewCase from './screens/NewCase';
 import FinishedCaseDetail from './screens/FinishedCasesDetails';
 import Register from './screens/Register';
-import {LoginService} from './services/login/LoginService';
-import {tokenService} from './services/token/tokenService';
 import Menu from './screens/Menu';
-import {AuthProvider, useAuth} from './context/authContext';
+import {useAuth} from './context/authContext';
 import CrearVehiculos from './screens/CrearVehiculos';
 import EliminarVehiculo from './screens/EliminarVehiculo';
+import RegisterCliente from './screens/RegisterCustomer';
+import AdminPanel from './screens/AdminPanel';
+import Inventario from './screens/Inventario';
+import PanelMecanico from './screens/PanelMecanico';
 
 const Drawer = createDrawerNavigator();
 
@@ -28,33 +30,35 @@ function App(): React.JSX.Element {
     {name: 'Register', component: Register},
   ];
   const screensMecanico = [
-    {name: 'Ver Stock', component: StockTable},
-    {name: 'Crear Stock', component: CrearStock},
-    {name: 'Buscar Stock', component: StockSearch},
+    {name: 'Panel de Mecánico', component: PanelMecanico},
+    {name: 'Inventario', component: Inventario},
     {name: 'Casos Terminados', component: FinishedCases},
-    {name: 'Casos Asignados', component: AssignedCases},
-    {name: 'Crear Vehiculos', component: CrearVehiculos},
     {name: 'Menu', component: Menu},
-    {name: 'Eliminar Vehiculos', component: EliminarVehiculo},
   ];
   const screensJefe = [
-    {name: 'Ver Stock', component: StockTable},
-    {name: 'Crear Stock', component: CrearStock},
-    {name: 'Buscar Stock', component: StockSearch},
-    {name: 'Crear Vehiculos', component: CrearVehiculos},
+    {name: 'Panel de administración', component: AdminPanel},
+    {name: 'Inventario', component: Inventario},
     {name: 'Casos Terminados', component: FinishedCases},
     {name: 'Menu', component: Menu},
   ];
   const hiddenScreens = [
     {name: 'Formulario de reparación', component: CaseFinalForm},
+    {name: 'Registro de Clientes', component: RegisterCliente},
     {name: 'Informe Completo', component: FinishedCaseDetail},
+    {name: 'Ver Stock', component: StockTable},
+    {name: 'Crear Stock', component: CrearStock},
+    {name: 'Buscar Stock', component: StockSearch},
+    {name: 'Nuevo Caso', component: NewCase},
+    {name: 'Casos Asignados', component: AssignedCases},
+    {name: 'Crear Vehiculos', component: CrearVehiculos},
+    {name: 'Eliminar Vehiculos', component: EliminarVehiculo},
   ];
   const [screens, setScreens] = useState(screensNoRegistrado);
   const {rol} = useAuth();
   useEffect(() => {
     if (rol == 2) {
       setScreens(screensMecanico);
-    } else if (rol == 1) {
+    } else if (rol == 3) {
       setScreens(screensJefe);
     } else {
       setScreens(screensNoRegistrado);
