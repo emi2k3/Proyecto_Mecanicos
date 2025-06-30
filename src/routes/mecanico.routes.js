@@ -77,7 +77,7 @@ router.get("/:id/reparaciones", async (req, res) => {
   }
 });
 
-router.post("/:id/reparaciones", async (req, res) => {
+router.post("/:id/asignar", async (req, res) => {
   const idMecanico = req.params.id;
   const { id_reparacion } = req.body;
 

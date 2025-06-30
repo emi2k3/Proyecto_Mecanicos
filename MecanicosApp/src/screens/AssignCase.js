@@ -2,62 +2,40 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import {repuestoService} from '../services/repuesto/repuestoService';
 import {mecanicosService} from '../services/mecanicos/mecanicosService';
-import {reparacionService} from '../services/reparacion/reparacionService';
+import {mecanicoReparacionesService} from '../services/mecanicoReparaciones/mecanicoReparacionesService';
 
-const AssignCase = ({navigation}) => {
+const AssignCase = ({navigation, route}) => {
   // Estados del formulario
-  const [formData, setFormData] = useState({
-    selectedRepuesto: '',
-    cantidad: '',
-    tiempoReparacion: '',
-    descripcion: reparacion?.descripcion || '',
-  });
 
-  const limpiarFormulario = () => {
-    setFormData({
-      selectedRepuesto: '',
-      cantidad: '',
-      tiempoReparacion: '',
-      descripcion: '',
-    });
-  };
+  const reparacionData = route?.params || {};
+  const {reparacion, vehiculo} = reparacionData;
 
   const handleNavigate = () => {
-    navigation.navigate('Casos Terminados');
+    navigation.navigate('Casos no Asignados');
   };
 
   // Estados de los items agregados
-  const [repuestosAgregados, setRepuestosAgregados] = useState([]);
   const [selectedMecanicos, setSelectedMecanicos] = useState([]);
 
   // Estados de datos disponibles
-  const [availableRepuestos, setAvailableRepuestos] = useState([]);
   const [availableMecanicos, setAvailableMecanicos] = useState([]);
   const [enviando, setEnviando] = useState(false);
 
   // Estados de UI
   const [uiState, setUiState] = useState({
-    loadingRepuestos: true,
     loadingMecanicos: true,
-    showRepuestoDropdown: false,
     showMecanicoDropdown: false,
   });
 
-  // Estados de selección temporal
-  const [selectedRepuestoObj, setSelectedRepuestoObj] = useState(null);
-
   // Servicios
-  const repuestoServiceInstance = new repuestoService();
   const mecanicosServiceInstance = new mecanicosService();
-  const reparacionServiceInstance = new reparacionService();
+  const mecanicoReparaciones = new mecanicoReparacionesService();
 
   // Cargar datos iniciales
   useEffect(() => {
@@ -65,20 +43,7 @@ const AssignCase = ({navigation}) => {
   }, []);
 
   const loadInitialData = async () => {
-    await Promise.all([loadRepuestos(), loadMecanicos()]);
-  };
-
-  const loadRepuestos = async () => {
-    try {
-      setUiState(prev => ({...prev, loadingRepuestos: true}));
-      const repuestos = await repuestoServiceInstance.getAllRepuestos();
-      setAvailableRepuestos(repuestos || []);
-    } catch (error) {
-      console.error('Error cargando repuestos:', error);
-      setAvailableRepuestos([]);
-    } finally {
-      setUiState(prev => ({...prev, loadingRepuestos: false}));
-    }
+    await Promise.all([loadMecanicos()]);
   };
 
   const loadMecanicos = async () => {
@@ -94,50 +59,8 @@ const AssignCase = ({navigation}) => {
     }
   };
 
-  // Handlers para form data
-  const updateFormData = (field, value) => {
-    setFormData(prev => ({...prev, [field]: value}));
-  };
-
   const updateUiState = (field, value) => {
     setUiState(prev => ({...prev, [field]: value}));
-  };
-
-  // Handlers para repuestos
-  const selectRepuesto = repuesto => {
-    updateFormData('selectedRepuesto', repuesto.descripcion);
-    setSelectedRepuestoObj(repuesto);
-    updateUiState('showRepuestoDropdown', false);
-  };
-
-  const addRepuesto = () => {
-    if (
-      !selectedRepuestoObj ||
-      !formData.cantidad ||
-      parseInt(formData.cantidad) <= 0
-    ) {
-      return;
-    }
-
-    const nuevoRepuesto = {
-      id_repuesto: selectedRepuestoObj.id_repuesto,
-      nombre: selectedRepuestoObj.descripcion,
-      cantidad: parseInt(formData.cantidad),
-    };
-
-    setRepuestosAgregados(prev => [...prev, nuevoRepuesto]);
-
-    // Resetear campos
-    updateFormData('selectedRepuesto', '');
-    updateFormData('cantidad', '');
-    setSelectedRepuestoObj(null);
-    updateUiState('showRepuestoDropdown', false);
-  };
-
-  const removeRepuesto = indexToRemove => {
-    setRepuestosAgregados(prev =>
-      prev.filter((_, index) => index !== indexToRemove),
-    );
   };
 
   // Handlers para mecánicos
@@ -166,81 +89,33 @@ const AssignCase = ({navigation}) => {
   // Handler para envío del formulario
   const handleSubmit = async () => {
     try {
-      const submitData = {
-        reparacionId,
-        repuestos: repuestosAgregados,
-        tiempoReparacion: formData.tiempoReparacion,
-        mecanicos: selectedMecanicos.map(m =>
-          typeof m === 'object' ? {id: m.id} : {id: m},
-        ),
-        descripcion: formData.descripcion,
-        vehiculo,
-      };
-
-      console.log('Datos a enviar:', submitData);
-
-      // Validar datos antes de enviar
-      const validacion = reparacionServiceInstance.validarDatos(submitData);
-
-      if (!validacion.esValido) {
-        alert(`Errores de validación:\n${validacion.errores.join('\n')}`);
-        return;
-      }
-
-      // Mostrar indicador de carga
-      setEnviando(true);
-
-      // Enviar datos
-      const resultado = await reparacionServiceInstance.completarReparacion(
-        submitData,
-      );
+      const resultado = selectedMecanicos.map(async mecanico => {
+        const mecanicoId =
+          typeof mecanico === 'object' ? mecanico.id : mecanico;
+        return await mecanicoReparaciones.postMecanicoReparaciones(mecanicoId, {
+          id_reparacion: reparacion.id_reparacion,
+        });
+      });
 
       alert('¡Reparación completada exitosamente!');
       console.log('Resultado:', resultado);
 
       // Limpiar el formulario
-      limpiarFormulario();
-      handleNavigate();
 
-      // Aquí puedes navegar a otra pantalla o limpiar el formulario
-      // navigation.goBack(); // Si usas React Navigation
-      // O limpiar el formulario:
-      // limpiarFormulario();
+      handleNavigate();
     } catch (error) {
       console.error('Error al enviar formulario:', error);
-      alert(`Error al completar la reparación: ${error.message}`);
+      alert(`Error al asignar la reparación: ${error.message}`);
     } finally {
       setEnviando(false);
     }
   };
-
-  // Validaciones
-  const canAddRepuesto =
-    selectedRepuestoObj && formData.cantidad && parseInt(formData.cantidad) > 0;
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.formContainer}>
           <FormTitle vehiculo={vehiculo} />
-
-          <RepuestosSection
-            formData={formData}
-            updateFormData={updateFormData}
-            uiState={uiState}
-            updateUiState={updateUiState}
-            availableRepuestos={availableRepuestos}
-            selectRepuesto={selectRepuesto}
-            addRepuesto={addRepuesto}
-            canAddRepuesto={canAddRepuesto}
-            repuestosAgregados={repuestosAgregados}
-            removeRepuesto={removeRepuesto}
-          />
-
-          <TiempoReparacionSection
-            value={formData.tiempoReparacion}
-            onChange={value => updateFormData('tiempoReparacion', value)}
-          />
 
           <MecanicosSection
             uiState={uiState}
@@ -251,11 +126,6 @@ const AssignCase = ({navigation}) => {
             removeMecanico={removeMecanico}
           />
 
-          <DescripcionSection
-            value={formData.descripcion}
-            onChange={value => updateFormData('descripcion', value)}
-          />
-
           <TouchableOpacity
             style={[
               styles.submitButton,
@@ -264,7 +134,7 @@ const AssignCase = ({navigation}) => {
             onPress={handleSubmit}
             disabled={enviando}>
             <Text style={styles.submitButtonText}>
-              {enviando ? 'Enviando...' : 'Completar informe'}
+              {enviando ? 'Enviando...' : 'Asignar mecánicos'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -273,94 +143,12 @@ const AssignCase = ({navigation}) => {
   );
 };
 
-// Componentes auxiliares para mejorar la legibilidad
 const FormTitle = ({vehiculo}) => (
   <Text style={styles.title}>
     {vehiculo
       ? `${vehiculo.tipo} - ${vehiculo.matricula}`
       : 'Tipo Vehículo - Matrícula'}
   </Text>
-);
-
-const RepuestosSection = ({
-  formData,
-  updateFormData,
-  uiState,
-  updateUiState,
-  availableRepuestos,
-  selectRepuesto,
-  addRepuesto,
-  canAddRepuesto,
-  repuestosAgregados,
-  removeRepuesto,
-}) => (
-  <>
-    <View style={styles.inputGroup}>
-      <Text style={styles.label}>Repuestos utilizados</Text>
-      <DropdownSelector
-        value={formData.selectedRepuesto}
-        placeholder={
-          uiState.loadingRepuestos
-            ? 'Cargando repuestos...'
-            : 'Seleccionar repuesto'
-        }
-        isOpen={uiState.showRepuestoDropdown}
-        onToggle={() =>
-          updateUiState('showRepuestoDropdown', !uiState.showRepuestoDropdown)
-        }
-        items={availableRepuestos}
-        onSelect={selectRepuesto}
-        isLoading={uiState.loadingRepuestos}
-        renderItem={item => item.descripcion}
-        keyExtractor={item => item.id_repuesto}
-      />
-    </View>
-
-    <View style={styles.inputGroup}>
-      <Text style={styles.label}>Cantidad</Text>
-      <View style={styles.cantidadContainer}>
-        <TextInput
-          style={[styles.input, styles.cantidadInput]}
-          placeholder="Cantidad"
-          value={formData.cantidad}
-          onChangeText={value => updateFormData('cantidad', value)}
-          keyboardType="numeric"
-          placeholderTextColor="#999"
-        />
-        <TouchableOpacity
-          style={[
-            styles.addButton,
-            !canAddRepuesto && styles.addButtonDisabled,
-          ]}
-          onPress={addRepuesto}
-          disabled={!canAddRepuesto}>
-          <Text style={styles.addButtonText}>Agregar</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-
-    {repuestosAgregados.length > 0 && (
-      <TagsContainer
-        items={repuestosAgregados}
-        onRemove={removeRepuesto}
-        renderLabel={item => `${item.nombre} (${item.cantidad})`}
-        keyExtractor={item => item.id_repuesto}
-      />
-    )}
-  </>
-);
-
-const TiempoReparacionSection = ({value, onChange}) => (
-  <View style={styles.inputGroup}>
-    <Text style={styles.label}>Tiempo de reparación</Text>
-    <TextInput
-      style={styles.input}
-      placeholder="X Horas"
-      value={value}
-      onChangeText={onChange}
-      placeholderTextColor="#999"
-    />
-  </View>
 );
 
 const MecanicosSection = ({
@@ -397,22 +185,6 @@ const MecanicosSection = ({
       keyExtractor={(item, index) =>
         typeof item === 'object' ? `mecanico-${item.id}` : `mecanico-${index}`
       }
-    />
-  </View>
-);
-
-const DescripcionSection = ({value, onChange}) => (
-  <View style={styles.inputGroup}>
-    <Text style={styles.label}>Descripción</Text>
-    <TextInput
-      style={[styles.input, styles.textArea]}
-      placeholder="Descripción completa de la reparación..."
-      value={value}
-      onChangeText={onChange}
-      multiline={true}
-      numberOfLines={4}
-      textAlignVertical="top"
-      placeholderTextColor="#999"
     />
   </View>
 );

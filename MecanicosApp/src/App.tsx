@@ -10,16 +10,14 @@ import CustomDrawer from './componentes/CustomDrawer';
 import FinishedCases from './screens/FinishedCases';
 import Login from './screens/Login';
 import CaseFinalForm from './screens/CaseFinalForm';
-import NewCase from './screens/NewCase';
 import FinishedCaseDetail from './screens/FinishedCasesDetails';
 import Register from './screens/Register';
-import {LoginService} from './services/login/LoginService';
-import {tokenService} from './services/token/tokenService';
 import Menu from './screens/Menu';
-import {AuthProvider, useAuth} from './context/authContext';
+import {useAuth} from './context/authContext';
 import CrearVehiculos from './screens/CrearVehiculos';
 import EliminarVehiculo from './screens/EliminarVehiculo';
 import NoAssignedCases from './screens/noAssignedCases';
+import AssignCase from './screens/AssignCase';
 
 const Drawer = createDrawerNavigator();
 
@@ -37,7 +35,6 @@ function App(): React.JSX.Element {
     {name: 'Crear Vehiculos', component: CrearVehiculos},
     {name: 'Menu', component: Menu},
     {name: 'Eliminar Vehiculos', component: EliminarVehiculo},
-    {name: 'Casos no Asignados', component: NoAssignedCases},
   ];
   const screensJefe = [
     {name: 'Ver Stock', component: StockTable},
@@ -46,17 +43,19 @@ function App(): React.JSX.Element {
     {name: 'Crear Vehiculos', component: CrearVehiculos},
     {name: 'Casos Terminados', component: FinishedCases},
     {name: 'Menu', component: Menu},
+    {name: 'Casos no Asignados', component: NoAssignedCases},
   ];
   const hiddenScreens = [
     {name: 'Formulario de reparación', component: CaseFinalForm},
     {name: 'Informe Completo', component: FinishedCaseDetail},
+    {name: 'Asignar Casos', component: AssignCase},
   ];
   const [screens, setScreens] = useState(screensNoRegistrado);
   const {rol} = useAuth();
   useEffect(() => {
     if (rol == 2) {
       setScreens(screensMecanico);
-    } else if (rol == 1) {
+    } else if (rol == 3) {
       setScreens(screensJefe);
     } else {
       setScreens(screensNoRegistrado);

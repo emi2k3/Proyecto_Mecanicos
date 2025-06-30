@@ -16,4 +16,16 @@ export class mecanicoReparacionesService {
       return [];
     }
   }
+  async postMecanicoReparaciones(id, body) {
+    try {
+      const response = await this.Servicio.post(
+        'mecanicos/' + id + '/asignar',
+        body,
+      );
+      return response.message;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
 }

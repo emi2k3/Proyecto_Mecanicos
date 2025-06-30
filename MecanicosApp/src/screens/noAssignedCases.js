@@ -43,6 +43,7 @@ const NoAssignedCases = ({navigation}) => {
   const handleAsignar = reparacion => {
     navigation.navigate('Asignar Casos', {
       reparacion: reparacion,
+      vehiculo: reparacion.vehiculo,
     });
   };
 
