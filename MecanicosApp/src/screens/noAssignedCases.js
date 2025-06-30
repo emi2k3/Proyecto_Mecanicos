@@ -3,33 +3,21 @@ import {useFocusEffect} from '@react-navigation/native';
 import {ScrollView, View} from 'react-native';
 import {Card, Icon, Button, Text} from '@rneui/themed';
 import {ActivityIndicator} from 'react-native';
-import {LoginService} from '../services/login/LoginService';
-import {tokenService} from '../services/token/tokenService';
-
-import {mecanicoReparacionesService} from '../services/mecanicoReparaciones/mecanicoReparacionesService';
 import {reparacionService} from '../services/reparacion/reparacionService';
 
-const AssignedCases = ({navigation}) => {
+const NoAssignedCases = ({navigation}) => {
   const [reparaciones, setReparaciones] = useState([]);
   const [loading, setLoading] = useState(true);
   const service = new reparacionService();
-  const serviceGet = new LoginService();
-  const tokenServices = new tokenService();
-  const asignaSerivce = new mecanicoReparacionesService();
 
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
         try {
-          const token = await serviceGet.getToken();
-          const tokendata = await tokenServices.extractID_Mecanico(token);
-          const reparacionesData =
-            await asignaSerivce.getAllMecanicoReparaciones(tokendata);
-          const reparacionesPendientes = reparacionesData.filter(
-            rep => rep.estado === false,
-          );
+          const reparacionesData = await service.getAllUnAssignedReparaciones();
+
           const reparacionesConVehiculo = await Promise.all(
-            reparacionesPendientes.map(async rep => {
+            reparacionesData.map(async rep => {
               const vehiculo = await service.getVehiculoReparado(
                 rep.id_vehiculo,
               );
@@ -52,11 +40,10 @@ const AssignedCases = ({navigation}) => {
     }, []),
   );
 
-  const handleCompletarInforme = reparacion => {
-    navigation.navigate('Formulario de reparación', {
-      reparacionId: reparacion.id_reparacion,
-      vehiculo: reparacion.vehiculo,
+  const handleAsignar = reparacion => {
+    navigation.navigate('Asignar Casos', {
       reparacion: reparacion,
+      vehiculo: reparacion.vehiculo,
     });
   };
 
@@ -103,7 +90,7 @@ const AssignedCases = ({navigation}) => {
 
               {/* Botón */}
               <Button
-                title="Completar informe"
+                title="Asignar"
                 buttonStyle={{
                   backgroundColor: '#5BC0BE',
                   borderRadius: 6,
@@ -112,7 +99,7 @@ const AssignedCases = ({navigation}) => {
                 }}
                 titleStyle={{color: '#fff', fontWeight: 'bold', fontSize: 14}}
                 containerStyle={{alignSelf: 'flex-start'}}
-                onPress={() => handleCompletarInforme(item)}
+                onPress={() => handleAsignar(item)}
               />
             </Card>
           ))
@@ -122,4 +109,4 @@ const AssignedCases = ({navigation}) => {
   );
 };
 
-export default AssignedCases;
+export default NoAssignedCases;

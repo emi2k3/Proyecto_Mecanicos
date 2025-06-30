@@ -19,6 +19,26 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/noasignadas", async (req, res) => {
+  try {
+    const resultado = await pool.query(
+      `SELECT r.*
+       FROM Reparacion r
+       LEFT JOIN MecanicoRealizaReparacion mrr
+         ON r.ID_Reparacion = mrr.ID_Reparacion
+       WHERE mrr.ID_Mecanico IS NULL;`
+    );
+    if (resultado.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No hay reparaciones sin asignar" });
+    }
+    return res.status(200).json({ message: resultado.rows });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+});
+
 router.get(
   "/vehiculo/:id",
   [param("id").isInt().withMessage("El ID debe ser un número entero")],

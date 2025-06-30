@@ -15,6 +15,15 @@ export class reparacionService {
     }
   }
 
+  async getAllUnAssignedReparaciones() {
+    try {
+      const response = await this.Servicio.get('reparaciones/noasignadas');
+      return response.message;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
   async getVehiculoReparado(id) {
     try {
       const response = await this.Servicio.get(`reparaciones/vehiculo/${id}`);

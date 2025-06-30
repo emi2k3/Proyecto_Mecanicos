@@ -10,13 +10,14 @@ import CustomDrawer from './componentes/CustomDrawer';
 import FinishedCases from './screens/FinishedCases';
 import Login from './screens/Login';
 import CaseFinalForm from './screens/CaseFinalForm';
-import NewCase from './screens/NewCase';
 import FinishedCaseDetail from './screens/FinishedCasesDetails';
 import Register from './screens/Register';
 import Menu from './screens/Menu';
 import {useAuth} from './context/authContext';
 import CrearVehiculos from './screens/CrearVehiculos';
 import EliminarVehiculo from './screens/EliminarVehiculo';
+import NoAssignedCases from './screens/noAssignedCases';
+import AssignCase from './screens/AssignCase';
 import RegisterCliente from './screens/RegisterCustomer';
 import AdminPanel from './screens/AdminPanel';
 import Inventario from './screens/Inventario';
@@ -40,18 +41,20 @@ function App(): React.JSX.Element {
     {name: 'Inventario', component: Inventario},
     {name: 'Casos Terminados', component: FinishedCases},
     {name: 'Menu', component: Menu},
+    {name: 'Casos no Asignados', component: NoAssignedCases},
   ];
   const hiddenScreens = [
     {name: 'Formulario de reparación', component: CaseFinalForm},
     {name: 'Registro de Clientes', component: RegisterCliente},
     {name: 'Informe Completo', component: FinishedCaseDetail},
+    {name: 'Asignar Casos', component: AssignCase},
     {name: 'Ver Stock', component: StockTable},
     {name: 'Crear Stock', component: CrearStock},
     {name: 'Buscar Stock', component: StockSearch},
     {name: 'Nuevo Caso', component: NewCase},
     {name: 'Casos Asignados', component: AssignedCases},
     {name: 'Crear Vehiculos', component: CrearVehiculos},
-    {name: 'Eliminar Vehiculos', component: EliminarVehiculo},
+    {name: 'Eliminar Vehiculos', component: EliminarVehiculo}
   ];
   const [screens, setScreens] = useState(screensNoRegistrado);
   const {rol} = useAuth();
