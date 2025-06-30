@@ -194,21 +194,45 @@ router.post("/", ReparacionSchema, async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
+
   try {
-    const { descripcion, tiempo, id_vehiculo } = req.body;
-    const resultado = await pool.query(
-      `
-      INSERT INTO Reparacion 
-      (Descripcion, Tiempo, ID_Vehiculo) 
-      VALUES ($1, $2, $3)
-      RETURNING *`,
-      [descripcion, tiempo, id_vehiculo]
+    const { descripcion, matricula, documento } = req.body;
+
+    // Buscar el vehículo y verificar que pertenezca al cliente con el documento
+    const vehiculoResult = await pool.query(
+      `SELECT v.ID_Vehiculo 
+       FROM Vehiculo v
+       INNER JOIN Cliente c ON v.ID_Cliente = c.ID_Cliente
+       INNER JOIN Persona p ON c.ID_Persona = p.ID_Persona
+       WHERE v.Matricula = $1 AND p.Documento = $2`,
+      [matricula, documento]
     );
-    return res.status(200).json({
+
+    // Verificar si el vehículo existe y pertenece al cliente
+    if (vehiculoResult.rows.length === 0) {
+      return res.status(404).json({
+        message:
+          "No se encontró un vehículo con esa matrícula que pertenezca al cliente con el documento proporcionado",
+      });
+    }
+
+    const idVehiculo = vehiculoResult.rows[0].id_vehiculo;
+
+    // Insertar la reparación con el ID del vehículo encontrado
+    const resultado = await pool.query(
+      `INSERT INTO Reparacion 
+       (Descripcion, ID_Vehiculo) 
+       VALUES ($1, $2) 
+       RETURNING *`,
+      [descripcion, idVehiculo]
+    );
+
+    return res.status(201).json({
       message: "La reparación fue creada correctamente",
       data: resultado.rows[0],
     });
   } catch (error) {
+    console.error("Error al crear reparación:", error);
     return res.status(500).json({ message: error.message });
   }
 });

@@ -206,4 +206,39 @@ export class reparacionService {
       return false;
     }
   }
+
+  /**
+   * Crear una nueva reparación
+   * @param {Object} reparacionData - Datos de la reparación
+   * @param {string} reparacionData.descripcion - Descripción de la reparación
+   * @param {string} reparacionData.matricula - Matrícula del vehículo
+   * @param {string} reparacionData.documento - Documento del cliente
+   * @returns {Promise<Object>} - Respuesta del servidor con la reparación creada
+   */
+  async crearReparacion(reparacionData) {
+    try {
+      const {descripcion, matricula, documento} = reparacionData;
+
+      // Validar datos requeridos
+      if (!descripcion || !matricula || !documento) {
+        throw new Error('Descripción, matrícula y documento son requeridos');
+      }
+
+      const payload = {
+        descripcion: descripcion,
+        matricula: matricula,
+        documento: documento,
+      };
+
+      console.log('Creando reparación:', payload);
+
+      const response = await this.Servicio.post('reparaciones', payload);
+
+      console.log('Reparación creada exitosamente:', response);
+      return response;
+    } catch (error) {
+      console.error('Error al crear reparación:', error);
+      throw new Error(`Error al crear la reparación: ${error.message}`);
+    }
+  }
 }

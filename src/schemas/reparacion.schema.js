@@ -9,19 +9,15 @@ const ReparacionSchema = [
     .isLength({ max: 256 })
     .withMessage("La descripcion no puede exceder 256 caracteres"),
 
-  body("tiempo")
+  body("matricula")
     .notEmpty()
-    .withMessage("El tiempo es requerido")
-    .isInt({ min: 1 })
-    .withMessage("El tiempo mínimo es 1 hora")
-    .isInt({ max: 168 })
-    .withMessage("El tiempo máximo es 168 horas (1 semana)"),
-
-  body("id_vehiculo")
-    .notEmpty()
-    .withMessage("El id_vehiculo es requerido")
-    .isInt({ min: 1 })
-    .withMessage("El ID del vehiculo debe ser un número válido"),
+    .withMessage("La matricula es requerida")
+    .isString()
+    .withMessage("La matricula debe ser texto")
+    .isLength({ min: 7, max: 8 })
+    .withMessage("La matricula debe tener entre 7 y 8 caracteres")
+    .matches(/^[A-Z]{3} \d{4}$/)
+    .withMessage("La matricula debe tener el formato ABC 1234"),
 ];
 
 const PUTReparacionSchema = [

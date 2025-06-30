@@ -23,6 +23,17 @@ export class clientesService {
       return null;
     }
   }
+
+  async createCliente(clienteData) {
+    try {
+      const response = await this.Servicio.post('clientes', clienteData);
+      return response;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   getClienteByDocumento(arrayClientes, documento) {
     return arrayClientes.filter(cliente => cliente.documento == documento);
   }
