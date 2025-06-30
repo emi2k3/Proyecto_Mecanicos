@@ -220,7 +220,8 @@ INSERT INTO Repuesto (Descripcion, Cantidad, Tipo) VALUES
 -- Insertar Reparaciones
 INSERT INTO Reparacion (Descripcion, ID_Vehiculo) VALUES
 ('Cambio de filtro', 1),
-('Reemplazo de pastillas de freno', 2);
+('Reemplazo de pastillas de freno', 2),
+('Cambio de chip', 1);
 
 -- Relación Mecánico - Reparación
 INSERT INTO MecanicoRealizaReparacion (ID_Mecanico, ID_Reparacion) VALUES

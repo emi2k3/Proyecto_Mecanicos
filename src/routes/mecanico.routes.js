@@ -50,6 +50,60 @@ router.get(
     }
   }
 );
+
+router.get("/:id/reparaciones", async (req, res) => {
+  const idMecanico = req.params.id;
+
+  if (!idMecanico || isNaN(parseInt(idMecanico))) {
+    return res.status(400).json({ message: "El ID debe ser un número entero" });
+  }
+
+  try {
+    const resultado = await pool.query(
+      `SELECT r.*
+       FROM Reparacion r
+       INNER JOIN MecanicoRealizaReparacion mrr ON r.ID_Reparacion = mrr.ID_Reparacion
+       WHERE mrr.ID_Mecanico = $1;`,
+      [idMecanico]
+    );
+    if (resultado.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No hay reparaciones para este mecánico" });
+    }
+    return res.status(200).json({ message: resultado.rows });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+});
+
+router.post("/:id/reparaciones", async (req, res) => {
+  const idMecanico = req.params.id;
+  const { id_reparacion } = req.body;
+
+  // Validaciones manuales
+  if (!idMecanico || isNaN(parseInt(idMecanico))) {
+    return res.status(400).json({ message: "El ID debe ser un número entero" });
+  }
+  if (!id_reparacion || isNaN(parseInt(id_reparacion)) || id_reparacion < 1) {
+    return res.status(400).json({
+      message: "La id_reparacion debe ser un número válido y mayor a 0",
+    });
+  }
+
+  try {
+    const resultado = await pool.query(
+      `INSERT INTO MecanicoRealizaReparacion (ID_Mecanico, ID_Reparacion) VALUES($1,$2) RETURNING *;`,
+      [idMecanico, id_reparacion]
+    );
+    return res.status(200).json({
+      message: "La reparación fue asignada correctamente",
+      data: resultado.rows[0],
+    });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+});
 // Crear un Mecanico
 router.post("/", MecanicoSchema, async (req, res) => {
   const errors = validationResult(req);

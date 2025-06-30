@@ -19,6 +19,7 @@ import Menu from './screens/Menu';
 import {AuthProvider, useAuth} from './context/authContext';
 import CrearVehiculos from './screens/CrearVehiculos';
 import EliminarVehiculo from './screens/EliminarVehiculo';
+import NoAssignedCases from './screens/noAssignedCases';
 
 const Drawer = createDrawerNavigator();
 
@@ -36,6 +37,7 @@ function App(): React.JSX.Element {
     {name: 'Crear Vehiculos', component: CrearVehiculos},
     {name: 'Menu', component: Menu},
     {name: 'Eliminar Vehiculos', component: EliminarVehiculo},
+    {name: 'Casos no Asignados', component: NoAssignedCases},
   ];
   const screensJefe = [
     {name: 'Ver Stock', component: StockTable},

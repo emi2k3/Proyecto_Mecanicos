@@ -1,6 +1,7 @@
 import {jwtDecode} from 'jwt-decode';
 import {Alert} from 'react-native';
 import {LoginService} from '../login/LoginService';
+import {combineTransition} from 'react-native-reanimated';
 export class tokenService {
   log = new LoginService();
   async extractTokenData(token) {
@@ -14,6 +15,22 @@ export class tokenService {
       this.checkExpired(decodedToken);
       const rol = decodedToken.rol.toString();
       return rol || null;
+    } catch (error) {
+      console.error('Failed to decode token:', error);
+      return null;
+    }
+  }
+  async extractID_Mecanico(token) {
+    try {
+      if (!token) {
+        return null;
+      }
+
+      const decodedToken = jwtDecode(token);
+
+      this.checkExpired(decodedToken);
+      const id_mecanico = decodedToken.id.toString();
+      return id_mecanico || null;
     } catch (error) {
       console.error('Failed to decode token:', error);
       return null;
