@@ -11,7 +11,7 @@ import {
 import {Text} from '@rneui/themed';
 import {vehiculosService} from '../services/vehiculos/vehiculosService';
 import {clientesService} from '../services/clientes/clientesService';
-import {ColorSpace} from 'react-native-reanimated';
+import {formatMatricula} from '../services/Validations';
 
 const CrearVehiculos = () => {
   const [matricula, setMatricula] = useState('');
@@ -22,6 +22,13 @@ const CrearVehiculos = () => {
 
   const creador = new vehiculosService();
   const buscador = new clientesService();
+
+  // Función para manejar el cambio de matrícula con formateo
+  const handleMatriculaChange = text => {
+    const formattedText = formatMatricula(text);
+    setMatricula(formattedText);
+  };
+
   const handleCrear = async () => {
     if (!modelo || !marca || !tipo || !matricula || !documento) {
       Alert.alert('Error', 'Por favor completa todos los campos');
@@ -101,10 +108,12 @@ const CrearVehiculos = () => {
             <Text style={styles.label}>Matrícula</Text>
             <TextInput
               style={styles.input}
-              placeholder="Matrícula"
+              placeholder="ABC 1234"
               value={matricula}
-              onChangeText={setMatricula}
+              onChangeText={handleMatriculaChange} // Usar la función de formateo
               placeholderTextColor="#999"
+              maxLength={8} // Limitar a 8 caracteres (ABC 1234)
+              autoCapitalize="characters" // Automáticamente convertir a mayúsculas
             />
           </View>
 
@@ -116,6 +125,7 @@ const CrearVehiculos = () => {
               value={documento}
               onChangeText={setDocuemento}
               placeholderTextColor="#999"
+              keyboardType="numeric" // Teclado numérico para el documento
             />
           </View>
 

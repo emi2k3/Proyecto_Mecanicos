@@ -19,6 +19,7 @@ import Menu from './screens/Menu';
 import {AuthProvider, useAuth} from './context/authContext';
 import CrearVehiculos from './screens/CrearVehiculos';
 import EliminarVehiculo from './screens/EliminarVehiculo';
+import RegisterCliente from './screens/RegisterCustomer';
 
 const Drawer = createDrawerNavigator();
 
@@ -31,6 +32,7 @@ function App(): React.JSX.Element {
     {name: 'Ver Stock', component: StockTable},
     {name: 'Crear Stock', component: CrearStock},
     {name: 'Buscar Stock', component: StockSearch},
+    {name: 'Registo de Clientes', component: RegisterCliente},
     {name: 'Nuevo Caso', component: NewCase},
     {name: 'Casos Terminados', component: FinishedCases},
     {name: 'Casos Asignados', component: AssignedCases},
