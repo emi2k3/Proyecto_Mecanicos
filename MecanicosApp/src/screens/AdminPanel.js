@@ -25,7 +25,7 @@ const AdminPanel = ({navigation}) => {
       subtitle: 'Ver y gestionar la asignación de reparaciones',
       icon: '📋',
       color: '#4ecdc4',
-      route: 'OrdenesTrabajoAdmin',
+      route: 'Casos no Asignados',
     },
     {
       id: 3,

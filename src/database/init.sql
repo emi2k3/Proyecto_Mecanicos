@@ -189,7 +189,6 @@ INSERT INTO Persona (Documento, Nombre_Completo,Rol) VALUES
 ('45678901', 'Ana Fernández','2'),
 ('81218361', 'Laura Gómez','1'),
 ('95347871', 'Carlos Rodríguez','1'),
-('45678901', 'Ana Fernández','2'),
 ('42749102', 'Emilio Marques','3');
 
 -- Insertar Teléfonos
@@ -214,7 +213,7 @@ INSERT INTO Vehiculo (Matricula, Tipo, ID_Cliente, Marca, Modelo) VALUES
 INSERT INTO Mecanico (Especializacion, ID_Turno, ID_Persona, Contrasena) VALUES
 ('Motores', 1, 1, '$2b$10$Z2aNMZ3zAcDJOyebAguArOw.rqQ4oievmjbFGocWwBtxMLpg4dUCC'), -- Matias Pérez, contraseña sin encriptar (password123)
 ('Frenos', 2, 4, '$2b$10$IiGyD39n4g1IRD3Kc3KDJu4QTJTRBKl.C9vfDDIEEdbh1Uzi1DurK'), -- Ana Fernández, contraseña sin encriptar (securepass456)
-('Todo', 2, 5, '$2a$10$muIi3spSIPc5HCXP39irvepsaPgYbE4gEqadsoz39kt5f9kVFygQy'); -- Emi Marques, contraseña sin encriptar (contra123)
+('Todo', 2, 7, '$2a$10$muIi3spSIPc5HCXP39irvepsaPgYbE4gEqadsoz39kt5f9kVFygQy'); -- Emi Marques, contraseña sin encriptar (contra123)
 
 
 -- Insertar Repuestos

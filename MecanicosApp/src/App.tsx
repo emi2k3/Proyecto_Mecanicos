@@ -22,6 +22,7 @@ import RegisterCliente from './screens/RegisterCustomer';
 import AdminPanel from './screens/AdminPanel';
 import Inventario from './screens/Inventario';
 import PanelMecanico from './screens/PanelMecanico';
+import NewCase from './screens/NewCase';
 
 const Drawer = createDrawerNavigator();
 
@@ -54,7 +55,7 @@ function App(): React.JSX.Element {
     {name: 'Nuevo Caso', component: NewCase},
     {name: 'Casos Asignados', component: AssignedCases},
     {name: 'Crear Vehiculos', component: CrearVehiculos},
-    {name: 'Eliminar Vehiculos', component: EliminarVehiculo}
+    {name: 'Eliminar Vehiculos', component: EliminarVehiculo},
   ];
   const [screens, setScreens] = useState(screensNoRegistrado);
   const {rol} = useAuth();
